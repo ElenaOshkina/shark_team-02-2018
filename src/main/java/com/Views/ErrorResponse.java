@@ -2,7 +2,6 @@ package com.Views;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.sun.istack.internal.Nullable;
 import javax.validation.constraints.NotNull;
 
 import com.Utilities.ErrorCoder;
@@ -36,7 +35,6 @@ public class ErrorResponse {
     }
 
     @SuppressWarnings("unused")
-    @Nullable
     public String getDescription() {
         return description;
     }
