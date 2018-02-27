@@ -1,6 +1,8 @@
 language: java
 jdk:
   - oraclejdk8
+  
+sudo: required
 
 services:
   - postgresql
@@ -24,4 +26,3 @@ deploy:
   on:
     repo: 3kybika/shark_team-02-2018
     branch: master
-  skip_cleanup: true
