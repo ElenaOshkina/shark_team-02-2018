@@ -16,14 +16,4 @@ branches:
   only:
   - master
 
-deploy:
-  provider: heroku
-  api_key:
-    secure: 1520508b-587d-49a8-b503-289735918f90
 
-  app: tp-sharkteam-backend
-
-  on:
-    repo: 3kybika/shark_team-02-2018
-    branch: master
-  skip_cleanup: true
