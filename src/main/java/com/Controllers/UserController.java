@@ -109,7 +109,7 @@ public class UserController {
         // Авторизация пользователя
         //ToDo: Когда будет БД - в аттрибут записывать id
         httpSession.setAttribute("login", login);
-        return ResponseEntity.ok(new SuccessResponce("User is successfully loged in!"));
+        return ResponseEntity.ok(currentUser);
     }
 
     //Разлогинивание пользователя
