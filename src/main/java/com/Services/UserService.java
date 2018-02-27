@@ -1,9 +1,9 @@
-package com.Services;
+package com.services;
 
 import org.springframework.stereotype.Service;
 import java.util.HashMap;
 
-import com.Models.User;
+import com.models.User;
 
 @Service
 public class UserService {

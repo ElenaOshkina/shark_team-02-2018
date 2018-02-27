@@ -1,4 +1,4 @@
-package com.Utilities;
+package com.utilities;
 
 /**
  * Created by Alex on 25.02.2018.

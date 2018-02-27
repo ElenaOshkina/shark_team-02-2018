@@ -1,10 +1,10 @@
-package com.Views;
+package com.views;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.constraints.NotNull;
 
-import com.Utilities.ErrorCoder;
+import com.utilities.ErrorCoder;
 
 /**
  * Created by Alex on 25.02.2018.

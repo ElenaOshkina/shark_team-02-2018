@@ -1,6 +1,6 @@
-package com.Controllers;
+package com.controllers;
 
-import com.Utilities.ErrorCoder;
+import com.utilities.ErrorCoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpSession;
 
-import com.Services.UserService;
-import com.Models.User;
+import com.services.UserService;
+import com.models.User;
 
-import com.Views.*;
+import com.views.*;
 
 /**
  * Created by Alex on 19.02.2018.
