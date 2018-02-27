@@ -1,0 +1,30 @@
+language: java
+jdk:
+  - oraclejdk8
+
+services:
+  - postgresql
+
+before_install:
+  - psql -c "CREATE USER Docker WITH SUPERUSER PASSWORD '123';" -U postgres
+  - psql -c "CREATE DATABASE SharkTeam_BD;" -U postgres
+  - psql -c "GRANT ALL ON DATABASE SharkTeam_BD TO Docker;" -U postgres
+
+branches:
+  only:
+  - master
+
+deploy:
+  provider: heroku
+  api_key:
+    secure: 1520508b-587d-49a8-b503-289735918f90
+
+  app: tp-sharkteam-backend
+
+  on:
+    repo: 3kybika/shark_team-02-2018
+    branch: master
+  skip_cleanup: true
+
+install:
+  - mvn clean install
