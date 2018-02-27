@@ -46,9 +46,9 @@ public class UserController {
 
         // Проверка: пустые ли поля?
         if (
-            StringUtils.isEmpty(login) ||
-            StringUtils.isEmpty(email)||
-            StringUtils.isEmpty(password)
+            StringUtils.isEmpty(login)
+            || StringUtils.isEmpty(email)
+            || StringUtils.isEmpty(password)
         ) {
             // Отправка запроса с ошибкой
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(ErrorCoder.EMPTY_FIELDS));
@@ -72,8 +72,8 @@ public class UserController {
     // Метод: Post
     // Адрес: "/signin"
     @RequestMapping(path = "/signin",
-            method = RequestMethod.POST
-            , consumes = "application/json",
+            method = RequestMethod.POST,
+            consumes = "application/json",
             produces = "application/json"
     )
     public ResponseEntity signIn(@RequestBody User body, HttpSession httpSession) {
@@ -81,8 +81,8 @@ public class UserController {
         final String password = body.getPassword();
 
         if (
-            StringUtils.isEmpty(login) ||
-            StringUtils.isEmpty(password)
+            StringUtils.isEmpty(login)
+            || StringUtils.isEmpty(password)
         ) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(ErrorCoder.EMPTY_FIELDS));
         }
@@ -143,7 +143,7 @@ public class UserController {
         //Проверка: залогинен ли пользователь
         final String currentUserLogin = (String) httpSession.getAttribute("login");
 
-        if (currentUserLogin== null) {
+        if (currentUserLogin == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(ErrorCoder.USER_NOT_LOGINED));
         }
         User currentUser = userService.getUser(currentUserLogin);
