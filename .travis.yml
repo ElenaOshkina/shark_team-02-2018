@@ -11,10 +11,6 @@ before_install:
   - psql -c "CREATE USER Docker WITH SUPERUSER PASSWORD '123';" -U postgres
   - psql -c "CREATE DATABASE SharkTeam_BD;" -U postgres
   - psql -c "GRANT ALL ON DATABASE SharkTeam_BD TO Docker;" -U postgres
-  - chmod +x mvnw
-  
-install:
-- mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 
 branches:
   only:
