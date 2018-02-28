@@ -16,4 +16,5 @@ Backend сервер для семестрового проекта по кур�
 | Регистрация | POST, /api/users/signup | {"login", "email", "password"} | {"id","login", "email"} |
 | Авторизация | POST, /api/users/signin | {"login", "password"} | {"id","login", "email"} |
 | Выход | POST, /api/users/exit |  | {"msg":"User is successfully log out!"} |
-| Запросить данные текущего пользователя | GET, /api/users/ | | {"id","login", "email"} | |
+| Запросить данные текущего пользователя | GET, /api/users/me | | {"id","login", "email"} | |
+| Изменить данные текущего пользователя | POST, /api/users/me | {"login", "email", "password"}| {"id","login", "email"} | |

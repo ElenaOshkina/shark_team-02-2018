@@ -1,4 +1,4 @@
-package com.utilities;
+package park.sharkteam.utilities;
 
 /**
  * Created by Alex on 25.02.2018.

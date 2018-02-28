@@ -1,16 +1,6 @@
 language: java
 jdk:
   - oraclejdk8
-  
-sudo: required
-
-services:
-  - postgresql
-
-before_install:
-  - psql -c "CREATE USER Docker WITH SUPERUSER PASSWORD '123';" -U postgres
-  - psql -c "CREATE DATABASE SharkTeam_BD;" -U postgres
-  - psql -c "GRANT ALL ON DATABASE SharkTeam_BD TO Docker;" -U postgres
 
 branches:
   only:

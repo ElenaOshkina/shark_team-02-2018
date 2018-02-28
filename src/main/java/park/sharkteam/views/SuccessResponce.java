@@ -1,4 +1,4 @@
-package com.views;
+package park.sharkteam.views;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;

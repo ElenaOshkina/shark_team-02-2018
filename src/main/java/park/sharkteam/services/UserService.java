@@ -1,17 +1,14 @@
-package com.services;
+package park.sharkteam.services;
 
+import park.sharkteam.models.User;
 import org.springframework.stereotype.Service;
 import java.util.HashMap;
 
-import com.models.User;
-
 @Service
 public class UserService {
-    // "БД" пользователей
+
     private final HashMap<String, User> registeredUser = new HashMap<String, User>();
 
-    // Регистрация нового пользователя
-    @SuppressWarnings("unused")
     public void addUser(String login, String email, String password) {
         registeredUser.put(login, new User(login, email, password));
     }
@@ -20,15 +17,12 @@ public class UserService {
         registeredUser.put(user.getLogin(), user);
     }
 
-    // Поиск пользователя
-    @SuppressWarnings("unused")
     public User getUser(String login) {
         return registeredUser.get(login);
     }
 
-    // Удаление существующего пользователя
-    @SuppressWarnings("unused")
     public void removeUser(String login) {
         registeredUser.remove(login);
     }
+
 }

@@ -1,15 +1,14 @@
-package com.views;
+package park.sharkteam.views;
 
+import park.sharkteam.utilities.ErrorCoder;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.constraints.NotNull;
 
-import com.utilities.ErrorCoder;
-
 /**
  * Created by Alex on 25.02.2018.
  */
-public class ErrorResponse {
+public class ErrorResponce {
 
     @JsonProperty("success")
     private final Boolean success = false;
@@ -19,22 +18,20 @@ public class ErrorResponse {
     private final String description;
 
     @JsonCreator
-    public ErrorResponse(@NotNull Integer code, String msg) {
+    public ErrorResponce(@NotNull Integer code, String msg) {
         this.errorId = code;
         this.description = msg;
     }
 
-    public ErrorResponse(ErrorCoder error) {
+    public ErrorResponce(ErrorCoder error) {
         this.errorId = error.getCode();
         this.description = error.getMsg();
     }
 
-    @SuppressWarnings("unused")
     public Integer getErrorId() {
         return errorId;
     }
 
-    @SuppressWarnings("unused")
     public String getDescription() {
         return description;
     }
