@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class SharkTeamBackendApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(SharkTeamBackendApplication.class, args);
-	}
+    public static void main(String[] args) {
+         SpringApplication.run(SharkTeamBackendApplication.class, args);
+    }
 }
