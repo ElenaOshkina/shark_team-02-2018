@@ -68,8 +68,8 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponce(ErrorCoder.EMPTY_FIELDS));
         }
 
-        if (httpSession.getAttribute("login") != null) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponce(ErrorCoder.USER_DUPLICATE));
+        if (httpSession.getAttribute("login") != null ) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponce(ErrorCoder.ALREADY_LOGGED));
         }
 
         final User currentUser = userService.getUser(login);
@@ -94,7 +94,9 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponce(ErrorCoder.USER_NOT_LOGINED));
         }
 
+        httpSession.setAttribute("login",null);
         httpSession.invalidate();
+
         return ResponseEntity.ok(new SuccessResponce("User is successfully log out!"));
     }
 
@@ -121,6 +123,7 @@ public class UserController {
 
         User currentUser = userService.getUser(currentUserLogin);
 
+        final String oldLogin = currentUser.getLogin();
         final String newLogin = body.getLogin();
         final String newPassword = body.getPassword();
         final String newEmail = body.getPassword();
@@ -135,7 +138,10 @@ public class UserController {
 
         if (!StringUtils.isEmpty(newLogin)) {
             currentUser.setLogin(newLogin);
+            //ToDo убрать когда будет id
+            httpSession.setAttribute("login", newLogin);
         }
+
         if (!StringUtils.isEmpty(newPassword)) {
             currentUser.setPassword(newPassword);
         }
@@ -143,6 +149,7 @@ public class UserController {
             currentUser.setEmail(newEmail);
         }
 
+        userService.removeUser(oldLogin);
         userService.addUser(currentUser);
 
         return ResponseEntity.ok(currentUser);
