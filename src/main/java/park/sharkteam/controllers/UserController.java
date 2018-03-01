@@ -68,7 +68,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponce(ErrorCoder.EMPTY_FIELDS));
         }
 
-        if (httpSession.getAttribute("login") != null ) {
+        if (httpSession.getAttribute("login") != null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponce(ErrorCoder.ALREADY_LOGGED));
         }
 
@@ -94,7 +94,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponce(ErrorCoder.USER_NOT_LOGINED));
         }
 
-        httpSession.setAttribute("login",null);
+        httpSession.setAttribute("login", null);
         httpSession.invalidate();
 
         return ResponseEntity.ok(new SuccessResponce("User is successfully log out!"));
