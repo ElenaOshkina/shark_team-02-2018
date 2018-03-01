@@ -11,7 +11,9 @@ public enum ErrorCoder {
     EMPTY_FIELDS(4, "Fields are empty!"),
     UNCORRECT_PASSWORD(5, "Uncorrect login or password!"),
     USER_NOT_EXIST(5, "Uncorrect login or password!"),
-    USER_NOT_LOGINED(6, "You are not logined!");
+    USER_NOT_LOGINED(6, "You are not logined!"),
+    ALREADY_LOGGED(7, "You are already logined!");
+    
     private Integer errorCode;
     private String message;
 
