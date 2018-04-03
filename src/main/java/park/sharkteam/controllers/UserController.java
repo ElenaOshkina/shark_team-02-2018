@@ -31,7 +31,7 @@ public class UserController {
 
 
     @PostMapping("/signup")
-    public ResponseEntity signUp(@RequestBody User body) {
+    public ResponseEntity<?> signUp(@RequestBody User body) {
         final String login = body.getLogin();
         final String email = body.getEmail();
         final String password = body.getPassword();
@@ -57,7 +57,7 @@ public class UserController {
     }
 
     @PostMapping("/signin")
-    public ResponseEntity signIn(@RequestBody User body, HttpSession httpSession) {
+    public ResponseEntity<?> signIn(@RequestBody User body, HttpSession httpSession) {
         final String login = body.getLogin();
         final String password = body.getPassword();
 
@@ -88,7 +88,7 @@ public class UserController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity logOut(HttpSession httpSession) {
+    public ResponseEntity<?> logOut(HttpSession httpSession) {
 
         if (httpSession.getAttribute("login") == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponce(ErrorCoder.USER_NOT_LOGINED));
@@ -101,7 +101,7 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity currentUser(HttpSession httpSession) {
+    public ResponseEntity<?> currentUser(HttpSession httpSession) {
 
         final String currentUserLogin = (String) httpSession.getAttribute("login");
 
@@ -113,7 +113,7 @@ public class UserController {
     }
 
     @PostMapping("/me")
-    public ResponseEntity changeUserData(@RequestBody User body, HttpSession httpSession) {
+    public ResponseEntity<?> changeUserData(@RequestBody User body, HttpSession httpSession) {
 
         final String currentUserLogin = (String) httpSession.getAttribute("login");
 
