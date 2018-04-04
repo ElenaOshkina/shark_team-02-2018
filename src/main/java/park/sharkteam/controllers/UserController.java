@@ -1,17 +1,23 @@
 package park.sharkteam.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpSession;
+import static java.lang.Math.toIntExact;
 
+import park.sharkteam.views.requests.ScoreForm;
+import park.sharkteam.views.requests.UserForm;
 import park.sharkteam.services.UserService;
 import park.sharkteam.models.User;
 import park.sharkteam.utilities.ErrorCoder;
-import park.sharkteam.views.ErrorResponce;
-import park.sharkteam.views.SuccessResponce;
+import park.sharkteam.views.responses.ErrorResponse;
+import park.sharkteam.views.responses.SuccessResponse;
 
 /**
  * Created by Alex on 19.02.2018.
@@ -31,127 +37,175 @@ public class UserController {
 
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signUp(@RequestBody User body) {
+    public ResponseEntity<?> signUp(@RequestBody UserForm body, HttpSession httpSession) {
         final String login = body.getLogin();
         final String email = body.getEmail();
         final String password = body.getPassword();
 
         if (
-                StringUtils.isEmpty(login)
-                        || StringUtils.isEmpty(email)
-                        || StringUtils.isEmpty(password)
-                ) {
-
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponce(ErrorCoder.EMPTY_FIELDS));
+            StringUtils.isEmpty(login)
+            || StringUtils.isEmpty(email)
+            || StringUtils.isEmpty(password)
+        ) {
+            return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse(ErrorCoder.EMPTY_FIELDS));
         }
 
-        if (userService.getUser(login) != null) {
-            // Отправка запроса с ошибкой
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponce(ErrorCoder.USER_DUPLICATE));
+        if (httpSession.getAttribute("id") != null ) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(new ErrorResponse(ErrorCoder.ALREADY_LOGGED));
         }
-
+        int id = 0;
         final User user = new User(login, email, password);
-        userService.addUser(user);
+        try {
+            id = userService.addUser(user);
+        }
+        catch (DuplicateKeyException exception){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(new ErrorResponse(ErrorCoder.USER_DUPLICATE));
+        }
+        catch (DataIntegrityViolationException exception) {
+            return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse(ErrorCoder.NOT_VALID_INFO));
+        }
+
+        httpSession.setAttribute("id", id);
 
         return ResponseEntity.ok(user);
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<?> signIn(@RequestBody User body, HttpSession httpSession) {
+    public ResponseEntity<?> signIn(@RequestBody UserForm body, HttpSession httpSession) {
         final String login = body.getLogin();
         final String password = body.getPassword();
 
         if (
-                StringUtils.isEmpty(login)
-                        || StringUtils.isEmpty(password)
-                ) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponce(ErrorCoder.EMPTY_FIELDS));
+            StringUtils.isEmpty(login)
+            || StringUtils.isEmpty(password)
+        ) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse(ErrorCoder.EMPTY_FIELDS));
         }
 
-        if (httpSession.getAttribute("login") != null) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponce(ErrorCoder.ALREADY_LOGGED));
+        if (httpSession.getAttribute("id") != null ) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(new ErrorResponse(ErrorCoder.ALREADY_LOGGED));
         }
-
-        final User currentUser = userService.getUser(login);
-
-        if (currentUser == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponce(ErrorCoder.USER_NOT_EXIST));
+        final User currentUser;
+        try {
+           currentUser = userService.getUserByLogin(login);
+        }
+        catch (EmptyResultDataAccessException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ErrorResponse(ErrorCoder.USER_NOT_EXIST));
         }
 
         if (!currentUser.getPassword().equals(password)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponce(ErrorCoder.UNCORRECT_PASSWORD));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ErrorResponse(ErrorCoder.UNCORRECT_PASSWORD));
         }
 
-        //ToDo: Когда будет БД - в аттрибут записывать id
-        httpSession.setAttribute("login", login);
+        httpSession.setAttribute("id", currentUser.getId());
         return ResponseEntity.ok(currentUser);
     }
 
     @PostMapping("/logout")
     public ResponseEntity<?> logOut(HttpSession httpSession) {
 
-        if (httpSession.getAttribute("login") == null) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponce(ErrorCoder.USER_NOT_LOGINED));
+        if (httpSession.getAttribute("id") == null) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(ErrorCoder.USER_NOT_LOGINED));
         }
 
-        httpSession.setAttribute("login", null);
+        httpSession.setAttribute("id",null);
         httpSession.invalidate();
 
-        return ResponseEntity.ok(new SuccessResponce("User is successfully log out!"));
+        return ResponseEntity.ok(new SuccessResponse("User is successfully log out!"));
     }
 
     @GetMapping("/me")
     public ResponseEntity<?> currentUser(HttpSession httpSession) {
 
-        final String currentUserLogin = (String) httpSession.getAttribute("login");
+        final Integer currentUserId = toIntExact(((Long) httpSession.getAttribute("id")));
 
-        if (currentUserLogin == null) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponce(ErrorCoder.USER_NOT_LOGINED));
+        if (currentUserId == null) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(new ErrorResponse(ErrorCoder.USER_NOT_LOGINED));
         }
-        User currentUser = userService.getUser(currentUserLogin);
+
+        User currentUser = null;
+        try {
+            currentUser = userService.getUserById(currentUserId);
+        }
+        catch (EmptyResultDataAccessException e){
+            httpSession.setAttribute("id",null);
+            httpSession.invalidate();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ErrorResponse(ErrorCoder.USER_NOT_EXIST));
+        }
+
         return ResponseEntity.ok(currentUser);
     }
 
     @PostMapping("/me")
-    public ResponseEntity<?> changeUserData(@RequestBody User body, HttpSession httpSession) {
+    public ResponseEntity<?> changeUserData(@RequestBody UserForm body, HttpSession httpSession) {
+        final Integer currentUserId = toIntExact(((Long) httpSession.getAttribute("id")));
 
-        final String currentUserLogin = (String) httpSession.getAttribute("login");
-
-        if (currentUserLogin == null) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponce(ErrorCoder.USER_NOT_LOGINED));
+        if (currentUserId == null) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(new ErrorResponse(ErrorCoder.USER_NOT_LOGINED));
         }
 
-        User currentUser = userService.getUser(currentUserLogin);
+        User currentUser = null;
+        try {
+            currentUser = userService.getUserById(currentUserId);
+        }
+        catch (EmptyResultDataAccessException e){
+            httpSession.setAttribute("id",null);
+            httpSession.invalidate();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ErrorResponse(ErrorCoder.USER_NOT_EXIST));
+        }
 
-        final String oldLogin = currentUser.getLogin();
         final String newLogin = body.getLogin();
         final String newPassword = body.getPassword();
-        final String newEmail = body.getPassword();
+        final String newEmail = body.getEmail();
 
         if (
-                StringUtils.isEmpty(newLogin)
-                        && StringUtils.isEmpty(newPassword)
-                        && StringUtils.isEmpty(newEmail)
-                ) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponce(ErrorCoder.EMPTY_FIELDS));
+            StringUtils.isEmpty(newLogin)
+            && StringUtils.isEmpty(newPassword)
+            && StringUtils.isEmpty(newEmail)
+        ) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ErrorResponse(ErrorCoder.EMPTY_FIELDS));
         }
 
-        if (!StringUtils.isEmpty(newLogin)) {
-            currentUser.setLogin(newLogin);
-            //ToDo убрать когда будет id
-            httpSession.setAttribute("login", newLogin);
-        }
-
-        if (!StringUtils.isEmpty(newPassword)) {
-            currentUser.setPassword(newPassword);
-        }
-        if (!StringUtils.isEmpty(newEmail)) {
-            currentUser.setEmail(newEmail);
-        }
-
-        userService.removeUser(oldLogin);
-        userService.addUser(currentUser);
+        User newUserData = new User(newLogin, newEmail, newPassword);
+        userService.updateUser(newUserData, currentUserId);
 
         return ResponseEntity.ok(currentUser);
     }
+
+    @GetMapping("/score")
+    public ResponseEntity<?> getRating(@RequestBody ScoreForm body, HttpSession httpSession) {
+        final Integer currentUserId = (Integer) httpSession.getAttribute("id");
+
+        if (currentUserId == null) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(new ErrorResponse(ErrorCoder.USER_NOT_LOGINED));
+        }
+
+        return ResponseEntity.ok(
+                userService.getTopPlayers(
+                    body.getStartPosition(),
+                    body.getElementsLimit()
+                )
+        );
+    }
 }
+
+
+
+
+

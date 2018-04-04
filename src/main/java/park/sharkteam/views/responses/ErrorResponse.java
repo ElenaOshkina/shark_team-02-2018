@@ -1,4 +1,4 @@
-package park.sharkteam.views;
+package park.sharkteam.views.responses;
 
 import park.sharkteam.utilities.ErrorCoder;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 /**
  * Created by Alex on 25.02.2018.
  */
-public class ErrorResponce {
+public class ErrorResponse {
 
     @JsonProperty("success")
     private final Boolean success = false;
@@ -18,12 +18,12 @@ public class ErrorResponce {
     private final String description;
 
     @JsonCreator
-    public ErrorResponce(@NotNull Integer code, String msg) {
+    public ErrorResponse(@NotNull Integer code, String msg) {
         this.errorId = code;
         this.description = msg;
     }
 
-    public ErrorResponce(ErrorCoder error) {
+    public ErrorResponse(ErrorCoder error) {
         this.errorId = error.getCode();
         this.description = error.getMsg();
     }

@@ -8,26 +8,39 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class User {
-    private static final AtomicLong COUNTER = new AtomicLong(0);
     private final long id;
 
-    //Чтобы доставать/выдавать данные из/в тела запроса - Json-объекта
     @JsonProperty("email")
     private String email;
     @JsonProperty("login")
     private String login;
     @JsonProperty(value = "password", access = JsonProperty.Access.WRITE_ONLY)
     private String password;
+    @JsonProperty("score")
+    private int score;
 
-    public User() {
-        this.id = COUNTER.getAndIncrement();
-    }
-
-    public User(String login, String email, String password) {
-        this.id = COUNTER.getAndIncrement();
+    public User(int id, String login, String email, String password, int score) {
+        this.id = id;
         this.login = login;
         this.email = email;
         this.password = password;
+        this.score = score;
+    }
+
+    public User(String login, String email, String password) {
+        this.id = 0;
+        this.login = login;
+        this.email = email;
+        this.password = password;
+        this.score = 0;
+    }
+
+    public User(String login, String email, String password, int score) {
+        this.id =0;
+        this.login = login;
+        this.email = email;
+        this.password = password;
+        this.score = score;
     }
 
     public long getId() {
@@ -59,5 +72,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public int getScore(){
+        return score;
+    }
+
+    public void setScore(int score){
+        this.score = score;
     }
 }
