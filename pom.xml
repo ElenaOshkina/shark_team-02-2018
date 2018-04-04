@@ -78,14 +78,6 @@
 						<artifactId>jackson-module-parameter-names</artifactId>
 					</dependency>
 					<dependency>
-						<groupId>com.fasterxml.jackson.datatype</groupId>
-						<artifactId>jackson-datatype-jdk8</artifactId>
-					</dependency>
-					<dependency>
-						<groupId>com.fasterxml.jackson.datatype</groupId>
-						<artifactId>jackson-datatype-jsr310</artifactId>
-					</dependency>
-					<dependency>
 						<groupId>junit</groupId>
 						<artifactId>junit</artifactId>
 						<version>4.12</version>
