@@ -6,9 +6,9 @@ sudo: required
 services:
   - postgresql
 before_script:
-  - psql -c "create user Docker with password '123';" -U postgres
-  - psql -c "create database SharkTeam;" -U postgres
-  - psql -c "grant all on database SharkTeam to Docker;" -U postgres
+  - psql -c "create user docker with password '123';" -U postgres
+  - psql -c "create database shark_team;" -U postgres
+  - psql -c "grant all on database shark_team to docker;" -U postgres
 
 
 
