@@ -5,7 +5,6 @@ package park.sharkteam.models;
  */
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.concurrent.atomic.AtomicLong;
 
 public class User {
     private final long id;
@@ -36,7 +35,7 @@ public class User {
     }
 
     public User(String login, String email, String password, int score) {
-        this.id =0;
+        this.id = 0;
         this.login = login;
         this.email = email;
         this.password = password;
@@ -74,11 +73,11 @@ public class User {
         this.password = password;
     }
 
-    public int getScore(){
+    public int getScore() {
         return score;
     }
 
-    public void setScore(int score){
+    public void setScore(int score) {
         this.score = score;
     }
 }

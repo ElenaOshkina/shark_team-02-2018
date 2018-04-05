@@ -1,14 +1,11 @@
 package park.sharkteam.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import park.sharkteam.models.User;
 import org.springframework.stereotype.Service;
-
 import javax.validation.constraints.NotNull;
-import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -24,13 +21,13 @@ public class UserService {
 
     public void createTable() {
         final String createTableQuery =
-                  "CREATE TABLE IF NOT EXISTS  users (" +
-                        "id SERIAL NOT NULL PRIMARY KEY," +
-                        "login VARCHAR(255) NOT NULL UNIQUE," +
-                        "email VARCHAR(255) NOT NULL UNIQUE," +
-                        "password VARCHAR(255) NOT NULL," +
-                        "score INTEGER DEFAULT 0" +
-                  ");";
+                  "CREATE TABLE IF NOT EXISTS  users ("
+                     + "id SERIAL NOT NULL PRIMARY KEY,"
+                     + "login VARCHAR(255) NOT NULL UNIQUE,"
+                     + "email VARCHAR(255) NOT NULL UNIQUE,"
+                     + "password VARCHAR(255) NOT NULL,"
+                     + "score INTEGER DEFAULT 0"
+                     + ");";
         jdbcTemplate.execute(createTableQuery);
     }
 
@@ -103,27 +100,27 @@ public class UserService {
         );
     }
 
-    public User updateUser(User user, Integer id){
+    public User updateUser(User user, Integer id) {
         StringBuilder querry = new StringBuilder();
 
         querry.append("UPDATE users SET ");
-        boolean f = false;
+        boolean changed = false;
         if (user.getEmail() != null) {
             querry.append("login = '" + user.getLogin() + "',");
-            f = true;
+            changed = true;
         }
         if (user.getLogin() != null) {
             querry.append("email = '" + user.getEmail() + "',");
-            f = true;
+            changed = true;
         }
         if (user.getPassword() != null) {
             querry.append("password = '" + user.getPassword() + "',");
-            f = true;
+            changed = true;
         }
 
         querry.deleteCharAt(querry.length() - 1);
         querry.append(" WHERE users.id = '" + id + "';");
-        if (f) {
+        if (changed) {
             jdbcTemplate.update(querry.toString());
         }
         return user;
@@ -135,10 +132,10 @@ public class UserService {
 
     public List<User> getTopPlayers(int limit, int offset) {
         return jdbcTemplate.query(
-                "SELECT id, login, email, password, score " +
-                        "FROM users " +
-                        "ORDER BY score DESC, login ASC " +
-                        "LIMIT ? OFFSET ?",
+                "SELECT id, login, email, password, score "
+                        + "FROM users "
+                        + "ORDER BY score DESC, login ASC "
+                        + "LIMIT ? OFFSET ?",
                 new Object[]{limit, offset},
                 (response, rowNum) -> new User(
                         response.getString("login"),

@@ -22,6 +22,7 @@ public class ScoreForm {
     public int getStartPosition() {
         return this.startPosition;
     }
+
     public void setStartPosition(int startPosition) {
         this.startPosition = startPosition;
     }
@@ -29,6 +30,7 @@ public class ScoreForm {
     public int getElementsLimit() {
         return this.elementsLimit;
     }
+
     public void setElementsLimit(int elementsLimit) {
         this.elementsLimit = elementsLimit;
     }

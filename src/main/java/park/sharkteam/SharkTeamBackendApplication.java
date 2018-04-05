@@ -8,5 +8,5 @@ public class SharkTeamBackendApplication {
 
     public static void main(String[] args) {
          SpringApplication.run(SharkTeamBackendApplication.class, args);
-	}
+    }
 }

@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpSession;
 import static java.lang.Math.toIntExact;
-
 import park.sharkteam.views.requests.ScoreForm;
 import park.sharkteam.views.requests.UserForm;
 import park.sharkteam.services.UserService;
@@ -52,7 +51,7 @@ public class UserController {
                 .body(new ErrorResponse(ErrorCoder.EMPTY_FIELDS));
         }
 
-        if (httpSession.getAttribute("id") != null ) {
+        if (httpSession.getAttribute("id") != null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                 .body(new ErrorResponse(ErrorCoder.ALREADY_LOGGED));
         }
@@ -60,12 +59,10 @@ public class UserController {
         final User user = new User(login, email, password);
         try {
             id = userService.addUser(user);
-        }
-        catch (DuplicateKeyException exception){
+        } catch (DuplicateKeyException exception)  {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                 .body(new ErrorResponse(ErrorCoder.USER_DUPLICATE));
-        }
-        catch (DataIntegrityViolationException exception) {
+        } catch (DataIntegrityViolationException exception) {
             return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse(ErrorCoder.NOT_VALID_INFO));
@@ -89,15 +86,14 @@ public class UserController {
                 .body(new ErrorResponse(ErrorCoder.EMPTY_FIELDS));
         }
 
-        if (httpSession.getAttribute("id") != null ) {
+        if (httpSession.getAttribute("id") != null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                 .body(new ErrorResponse(ErrorCoder.ALREADY_LOGGED));
         }
         final User currentUser;
         try {
            currentUser = userService.getUserByLogin(login);
-        }
-        catch (EmptyResultDataAccessException e){
+        } catch (EmptyResultDataAccessException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ErrorResponse(ErrorCoder.USER_NOT_EXIST));
         }
@@ -118,7 +114,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(ErrorCoder.USER_NOT_LOGINED));
         }
 
-        httpSession.setAttribute("id",null);
+        httpSession.setAttribute("id", null);
         httpSession.invalidate();
 
         return ResponseEntity.ok(new SuccessResponse("User is successfully log out!"));
@@ -137,9 +133,8 @@ public class UserController {
         User currentUser = null;
         try {
             currentUser = userService.getUserById(currentUserId);
-        }
-        catch (EmptyResultDataAccessException e){
-            httpSession.setAttribute("id",null);
+        } catch (EmptyResultDataAccessException e) {
+            httpSession.setAttribute("id", null);
             httpSession.invalidate();
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ErrorResponse(ErrorCoder.USER_NOT_EXIST));
@@ -160,9 +155,8 @@ public class UserController {
         User currentUser = null;
         try {
             currentUser = userService.getUserById(currentUserId);
-        }
-        catch (EmptyResultDataAccessException e){
-            httpSession.setAttribute("id",null);
+        } catch (EmptyResultDataAccessException e) {
+            httpSession.setAttribute("id", null);
             httpSession.invalidate();
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(new ErrorResponse(ErrorCoder.USER_NOT_EXIST));
