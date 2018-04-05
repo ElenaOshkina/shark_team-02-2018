@@ -46,8 +46,8 @@ public class UserService {
 
     public int addUser(@NotNull User user) {
         return jdbcTemplate.queryForObject(
-                "INSERT INTO users(login, email, password, score) VALUES(?, ?, ?, ?)" +
-                        "RETURNING id",
+                "INSERT INTO users(login, email, password, score) VALUES(?, ?, ?, ?)"
+                        + "RETURNING id",
                 new Object[]{
                         user.getLogin(),
                         user.getEmail(),
