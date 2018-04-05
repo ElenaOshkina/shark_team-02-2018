@@ -48,7 +48,7 @@ public class UserController {
             || StringUtils.isEmpty(password)
         ) {
             return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
+                .status(HttpStatus.NOT_FOUND)
                 .body(new ErrorResponse(ErrorCoder.EMPTY_FIELDS));
         }
 
@@ -65,7 +65,7 @@ public class UserController {
                 .body(new ErrorResponse(ErrorCoder.USER_DUPLICATE));
         } catch (DataIntegrityViolationException exception) {
             return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
+                .status(HttpStatus.NOT_FOUND)
                 .body(new ErrorResponse(ErrorCoder.NOT_VALID_INFO));
         }
 
