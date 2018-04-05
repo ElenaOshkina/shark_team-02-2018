@@ -48,9 +48,9 @@ public class UserControllerTest {
                         .header("content-type", "application/json")
                         .content(
                                 "{" +
-                                        "\"login\":\"\", " +
-                                        "\"password\":\"\"," +
-                                        " \"email\":\"\"" +
+                                        "\"loginField\":\"\", " +
+                                        "\"passwordField\":\"\"," +
+                                        " \"emaiFieldl\":\"\"" +
                                         "}"
                         )
         ).andExpect(status().is4xxClientError());
@@ -62,9 +62,9 @@ public class UserControllerTest {
                         .header("content-type", "application/json")
                         .content(
                                 "{" +
-                                        "\"login\":\"login\", " +
-                                        "\"password\":\"password\"," +
-                                        " \"email\":\"user@mail.ru\"" +
+                                        "\"loginField\":\"login\", " +
+                                        "\"passwordField\":\"password\"," +
+                                        " \"emailField\":\"user@mail.ru\"" +
                                         "}"
                         )
         ).andExpect(status().isOk());
@@ -75,9 +75,9 @@ public class UserControllerTest {
                         .header("content-type", "application/json")
                         .content(
                                 "{" +
-                                        "\"login\":\"login\", " +
-                                        "\"password\":\"password\"," +
-                                        " \"email\":\"user@mail.ru\"" +
+                                        "\"loginField\":\"login\", " +
+                                        "\"passwordField\":\"password\"," +
+                                        " \"emailField\":\"user@mail.ru\"" +
                                         "}"
                         )
         ).andExpect(status().is4xxClientError());
@@ -92,9 +92,9 @@ public class UserControllerTest {
                         .header("content-type", "application/json")
                         .content(
                                 "{" +
-                                        "\"login\":\"login\", " +
-                                        "\"password\":\"password\"," +
-                                        " \"email\":\"user@mail.ru\"" +
+                                        "\"loginField\":\"login\", " +
+                                        "\"passwordField\":\"password\"," +
+                                        " \"emailField\":\"user@mail.ru\"" +
                                         "}"
                         )
         ).andExpect(status().isOk());
@@ -117,9 +117,9 @@ public class UserControllerTest {
                         .header("content-type", "application/json")
                         .content(
                                 "{" +
-                                        "\"login\":\"login\", " +
-                                        "\"password\":\"uncorrect_password\"," +
-                                        " \"email\":\"user@mail.ru\"" +
+                                        "\"loginField\":\"login\", " +
+                                        "\"passwordField\":\"uncorrect_password\"," +
+                                        " \"emailField\":\"user@mail.ru\"" +
                                         "}"
                         )
         ).andExpect(status().is4xxClientError());
@@ -130,9 +130,9 @@ public class UserControllerTest {
                         .header("content-type", "application/json")
                         .content(
                                 "{" +
-                                        "\"login\":\"uncorrect_login\", " +
-                                        "\"password\":\"password\"," +
-                                        " \"email\":\"user@mail.ru\"" +
+                                        "\"loginField\":\"uncorrect_login\", " +
+                                        "\"passwordField\":\"password\"," +
+                                        " \"emailField\":\"user@mail.ru\"" +
                                         "}"
                         )
         ).andExpect(status().is4xxClientError());
@@ -143,9 +143,9 @@ public class UserControllerTest {
                         .header("content-type", "application/json")
                         .content(
                                 "{" +
-                                        "\"login\":\"login\", " +
-                                        "\"password\":\"password\"," +
-                                        " \"email\":\"user@mail.ru\"" +
+                                        "\"loginField\":\"login\", " +
+                                        "\"passwordField\":\"password\"," +
+                                        " \"emailField\":\"user@mail.ru\"" +
                                         "}"
                         )
         ).andExpect(status().isOk());
@@ -160,9 +160,9 @@ public class UserControllerTest {
                         .header("content-type", "application/json")
                         .content(
                                 "{" +
-                                        "\"login\":\"login\", " +
-                                        "\"password\":\"password\"," +
-                                        " \"email\":\"user@mail.ru\"" +
+                                        "\"loginField\":\"login\", " +
+                                        "\"passwordField\":\"password\"," +
+                                        " \"emailField\":\"user@mail.ru\"" +
                                         "}"
                         )
         ).andExpect(status().isOk());
@@ -176,9 +176,9 @@ public class UserControllerTest {
                 .header("content-type", "application/json")
                 .content(
                         "{" +
-                                "\"login\":\"new_login\", " +
-                                "\"password\":\"new_password\"," +
-                                " \"email\":\"new_email@mail.ru\"" +
+                                "\"loginField\":\"new_login\", " +
+                                "\"passwordField\":\"new_password\"," +
+                                " \"emailField\":\"new_email@mail.ru\"" +
                                 "}"
                 )
         ).andExpect(status().isOk());
@@ -203,9 +203,9 @@ public class UserControllerTest {
                         .header("content-type", "application/json")
                         .content(
                                 "{" +
-                                        "\"login\":\"new_login\", " +
-                                        "\"password\":\"new_password\"," +
-                                        " \"email\":\"new_email@mail.ru\"" +
+                                        "\"loginField\":\"new_login\", " +
+                                        "\"passwordField\":\"new_password\"," +
+                                        " \"emailField\":\"new_email@mail.ru\"" +
                                         "}"
                         )
         ).andExpect(status().isOk());
