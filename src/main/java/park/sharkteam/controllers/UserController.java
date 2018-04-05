@@ -123,7 +123,7 @@ public class UserController {
     @GetMapping("/me")
     public ResponseEntity<?> currentUser(HttpSession httpSession) {
 
-        final Integer currentUserId = (Integer) httpSession.getAttribute("id");;
+        final Integer currentUserId = (Integer) httpSession.getAttribute("id");
 
         if (currentUserId == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
@@ -145,7 +145,7 @@ public class UserController {
 
     @PostMapping("/me")
     public ResponseEntity<?> changeUserData(@RequestBody UserForm body, HttpSession httpSession) {
-        final Integer currentUserId = (Integer) httpSession.getAttribute("id");;
+        final Integer currentUserId = (Integer) httpSession.getAttribute("id");
 
         if (currentUserId == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
