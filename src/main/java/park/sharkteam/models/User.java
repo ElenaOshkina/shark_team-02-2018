@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 
 public class User {
-    private final long id;
+    private final int id;
 
     @JsonProperty("email")
     private String email;
@@ -42,10 +42,9 @@ public class User {
         this.score = score;
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
-
 
     public String getLogin() {
         return login;
