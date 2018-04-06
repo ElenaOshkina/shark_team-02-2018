@@ -19,6 +19,7 @@ public class UserService {
         createTable();
     }
 
+    //ToDo: перенести в миграции
     public void createTable() {
         final String createTableQuery =
                   "CREATE TABLE IF NOT EXISTS  users ("
