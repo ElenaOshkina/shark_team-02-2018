@@ -15,49 +15,31 @@ public class UserService {
     @Autowired
     public UserService(JdbcTemplate template) {
         this.jdbcTemplate = template;
-        deleteTable();
-        createTable();
     }
 
-    //ToDo: перенести в миграции
-    public void createTable() {
-        final String createTableQuery =
-                  "CREATE TABLE IF NOT EXISTS  users ("
-                     + "id SERIAL NOT NULL PRIMARY KEY,"
-                     + "login VARCHAR(255) NOT NULL UNIQUE,"
-                     + "email VARCHAR(255) NOT NULL UNIQUE,"
-                     + "password VARCHAR(255) NOT NULL,"
-                     + "score INTEGER DEFAULT 0"
-                     + ");";
-        jdbcTemplate.execute(createTableQuery);
-    }
 
-    public void deleteTable() {
-        jdbcTemplate.execute("DROP TABLE IF EXISTS users CASCADE");
-    }
 
     private static final RowMapper<User> USER_MAPPER = (responce, num) ->
             new User(
                     responce.getInt("id"),
                     responce.getString("login"),
-                    responce.getString("password"),
                     responce.getString("email"),
-                    responce.getInt("score")
+                    responce.getString("password"),
+                    responce.getInt("score"),
+                    responce.getString("avatar")
              );
 
     public int addUser(@NotNull User user) {
         return jdbcTemplate.queryForObject(
                 "INSERT INTO users(login, email, password, score) VALUES(?, ?, ?, ?)"
                         + "RETURNING id",
-                new Object[]{
+        (response, rowNum) -> new Integer(
+                response.getInt("id")
+        ),
                         user.getLogin(),
                         user.getEmail(),
                         user.getPassword(),
                         user.getScore()
-                },
-                (response, rowNum) -> new Integer(
-                        response.getInt("id")
-                )
         );
     }
 
@@ -65,13 +47,7 @@ public class UserService {
          return jdbcTemplate.queryForObject(
                  "SELECT * FROM users WHERE (users.login) = ?",
                  new Object[]{login},
-                 (response, rowNum) -> new User(
-                         response.getInt("id"),
-                         response.getString("login"),
-                         response.getString("email"),
-                         response.getString("password"),
-                         response.getInt("score")
-                 )
+                 USER_MAPPER
          );
     }
 
@@ -79,12 +55,7 @@ public class UserService {
         return jdbcTemplate.queryForObject(
                 "SELECT * FROM users WHERE (users.email) = ?",
                 new Object[]{email},
-                (response, rowNum) -> new User(
-                        response.getString("login"),
-                        response.getString("email"),
-                        response.getString("password"),
-                        response.getInt("score")
-                )
+                USER_MAPPER
         );
     }
 
@@ -92,12 +63,7 @@ public class UserService {
         return jdbcTemplate.queryForObject(
                 "SELECT * FROM users WHERE (users.id) = (?)",
                 new Object[]{id},
-                (response, rowNum) -> new User(
-                        response.getString("login"),
-                        response.getString("email"),
-                        response.getString("password"),
-                        response.getInt("score")
-                )
+                USER_MAPPER
         );
     }
 
@@ -116,6 +82,11 @@ public class UserService {
         }
         if (user.getPassword() != null) {
             querry.append("password = '" + user.getPassword() + "',");
+            changed = true;
+        }
+
+        if (user.getAvatar() != null) {
+            querry.append("avatar = '" + user.getAvatar() + "',");
             changed = true;
         }
 

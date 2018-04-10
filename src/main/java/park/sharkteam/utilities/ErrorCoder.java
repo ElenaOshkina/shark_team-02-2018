@@ -13,7 +13,9 @@ public enum ErrorCoder {
     UNCORRECT_PASSWORD(6, "Uncorrect login or password!"),
     USER_NOT_EXIST(6, "Uncorrect login or password!"),
     USER_NOT_LOGINED(7, "You are not logined!"),
-    ALREADY_LOGGED(8, "You are already logined!");
+    ALREADY_LOGGED(8, "You are already logined!"),
+    UNCORRECT_FILE(9, "You are try to upload uncorrect file!"),
+    UNEXISTED_FILE(10, "Avatar not exist!");
     private Integer errorCode;
     private String message;
 

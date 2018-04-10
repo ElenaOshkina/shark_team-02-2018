@@ -102,6 +102,31 @@ public class UserControllerTest {
         final User user = userService.getUserByLogin("login");
         assertNotNull(user);
 
+        mockMvc.perform(
+                MockMvcRequestBuilders.post("/api/users/signup")
+                        .header("content-type", "application/json")
+                        .sessionAttr("id", user.getId())
+                        .content(
+                                "{" +
+                                        "\"loginField\":\"login\", " +
+                                        "\"passwordField\":\"password\"," +
+                                        " \"emailField\":\"user@mail.ru\"" +
+                                        "}"
+                        )
+        ).andExpect(status().is4xxClientError());
+
+        //FORBIDDEN
+        mockMvc.perform(
+                MockMvcRequestBuilders.post("/api/users/signin")
+                        .header("content-type", "application/json")
+                        .content(
+                                "{" +
+                                        "\"loginField\":\"login\", " +
+                                        "\"passwordField\":\"uncorrect_password\"," +
+                                        "}"
+                        )
+        ).andExpect(status().is4xxClientError());
+
         //logout
         //OK_RESPONSE
         mockMvc.perform(MockMvcRequestBuilders.post("/api/users/logout")
@@ -110,6 +135,24 @@ public class UserControllerTest {
                 .content("")
         ).andExpect(status().isOk());
 
+
+        //FORBIDDEN
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/users/logout")
+                .header("content-type", "application/json")
+                .content("")
+        ).andExpect(status().is4xxClientError());
+
+        //FORBIDDEN
+        mockMvc.perform(
+                MockMvcRequestBuilders.post("/api/users/signin")
+                        .header("content-type", "application/json")
+                        .content(
+                                "{" +
+                                        "\"loginField\":\"\", " +
+                                        "\"passwordField\":\"\"" +
+                                        "}"
+                        )
+        ).andExpect(status().is4xxClientError());
 
         //NOT_FOUND
         mockMvc.perform(
@@ -141,6 +184,20 @@ public class UserControllerTest {
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/users/signin")
                         .header("content-type", "application/json")
+                        .sessionAttr("id", user.getId())
+                        .content(
+                                "{" +
+                                        "\"loginField\":\"login\", " +
+                                        "\"passwordField\":\"password\"," +
+                                        " \"emailField\":\"user@mail.ru\"" +
+                                        "}"
+                        )
+        ).andExpect(status().is4xxClientError());
+
+        //OK
+        mockMvc.perform(
+                MockMvcRequestBuilders.post("/api/users/signin")
+                        .header("content-type", "application/json")
                         .content(
                                 "{" +
                                         "\"loginField\":\"login\", " +
@@ -153,6 +210,20 @@ public class UserControllerTest {
 
     @Test
     public void testChange() throws Exception {
+
+        //FORBIDDEN
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/users/me")
+                .header("content-type", "application/json")
+        )
+        .andExpect(status().is4xxClientError());
+
+        //FORBIDDEN
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/users/me")
+                .header("content-type", "application/json")
+                .sessionAttr("id", -1)
+        )
+        .andExpect(status().is4xxClientError());
+
         //SignUp
         //OK_RESPONSE
         mockMvc.perform(
@@ -170,6 +241,43 @@ public class UserControllerTest {
         final User user = userService.getUserByLogin("login");
         assertNotNull(user);
 
+        //Forbidden
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/users/me")
+                .header("content-type", "application/json")
+                .content(
+                        "{" +
+                                "\"loginField\":\"new_login\", " +
+                                "\"passwordField\":\"new_password\"," +
+                                " \"emailField\":\"new_email@mail.ru\"" +
+                                "}"
+                )
+        ).andExpect(status().is4xxClientError());
+
+        //Forbidden
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/users/me")
+                .header("content-type", "application/json")
+                .sessionAttr("id",-1)
+                .content(
+                        "{" +
+                                "\"loginField\":\"new_login\", " +
+                                "\"passwordField\":\"new_password\"," +
+                                " \"emailField\":\"new_email@mail.ru\"" +
+                                "}"
+                )
+        ).andExpect(status().is4xxClientError());
+        //Forbidden
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/users/me")
+                .sessionAttr("id", user.getId())
+                .header("content-type", "application/json")
+                .content(
+                        "{" +
+                                "\"loginField\":\"\", " +
+                                "\"passwordField\":\"\"," +
+                                " \"emailField\":\"\"" +
+                                "}"
+                )
+        ).andExpect(status().is4xxClientError());
+
         //OK_RESPONSE
         mockMvc.perform(MockMvcRequestBuilders.post("/api/users/me")
                 .sessionAttr("id", user.getId())
@@ -182,12 +290,13 @@ public class UserControllerTest {
                                 "}"
                 )
         ).andExpect(status().isOk());
+
         //OK_RESPONSE
         mockMvc.perform(MockMvcRequestBuilders.get("/api/users/me")
                 .sessionAttr("id", user.getId())
                 .header("content-type", "application/json")
         )
-                .andExpect(status().isOk());
+        .andExpect(status().isOk());
 
         //logout
         //OK_RESPONSE
@@ -208,6 +317,53 @@ public class UserControllerTest {
                                         " \"emailField\":\"new_email@mail.ru\"" +
                                         "}"
                         )
+        ).andExpect(status().isOk());
+    }
+
+    @Test
+    public void testScore() throws Exception {
+        final User firstUser = new User("login1", "email1", "password");
+        final int firstUserId = userService.addUser(firstUser);
+        assertNotNull(firstUserId);
+        userService.updateScore(firstUserId, 100);
+
+        final User secondUser = new User("login2", "email2", "password");
+        final int secondUserId = userService.addUser(secondUser);
+        assertNotNull(secondUserId);
+        userService.updateScore(secondUserId, 1);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/users/score")
+                .header("content-type", "application/json")
+        )
+        .andExpect(status().is4xxClientError());
+
+        //OK_RESPONSE
+        mockMvc.perform(
+                MockMvcRequestBuilders.post("/api/users/signup")
+                        .header("content-type", "application/json")
+                        .content(
+                                "{" +
+                                        "\"loginField\":\"login\", " +
+                                        "\"passwordField\":\"password\"," +
+                                        " \"emailField\":\"user@mail.ru\"" +
+                                        "}"
+                        )
+        ).andExpect(status().isOk());
+
+        final User user = userService.getUserByLogin("login");
+        assertNotNull(user);
+
+        //FORBIDDEN
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/api/users/score")
+                        .header("content-type", "application/json")
+        ).andExpect(status().is4xxClientError());
+
+        //OK_RESPONSE
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/api/users/score")
+                        .header("content-type", "application/json")
+                        .sessionAttr("id", user.getId())
         ).andExpect(status().isOk());
     }
 }

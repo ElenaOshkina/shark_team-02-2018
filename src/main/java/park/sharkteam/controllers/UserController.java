@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpSession;
 
+import park.sharkteam.views.requests.LoginForm;
 import park.sharkteam.views.requests.ScoreForm;
 import park.sharkteam.views.requests.UserForm;
 import park.sharkteam.services.UserService;
@@ -17,6 +18,8 @@ import park.sharkteam.models.User;
 import park.sharkteam.utilities.ErrorCoder;
 import park.sharkteam.views.responses.ErrorResponse;
 import park.sharkteam.views.responses.SuccessResponse;
+
+import java.util.Comparator;
 
 /**
  * Created by Alex on 19.02.2018.
@@ -74,7 +77,7 @@ public class UserController {
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<?> signIn(@RequestBody UserForm body, HttpSession httpSession) {
+    public ResponseEntity<?> signIn(@RequestBody LoginForm body, HttpSession httpSession) {
         final String login = body.getLogin();
         final String password = body.getPassword();
 
@@ -113,7 +116,6 @@ public class UserController {
         if (httpSession.getAttribute("id") == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(ErrorCoder.USER_NOT_LOGINED));
         }
-
 
         httpSession.invalidate();
 
