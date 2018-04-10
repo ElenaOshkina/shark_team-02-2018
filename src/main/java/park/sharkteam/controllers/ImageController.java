@@ -57,8 +57,7 @@ public class ImageController {
             String extension = file.getOriginalFilename();
             if (extension.lastIndexOf(".") != -1) {
                 extension = extension.substring(extension.lastIndexOf("."));
-            }
-            else{
+            } else {
                 extension = ".png";
             }
             String fileName = Integer.toString(currentUser.getId()) + extension;
@@ -66,8 +65,7 @@ public class ImageController {
 
             currentUser.setAvatar(fileName);
             userService.updateUser(currentUser, currentUserId);
-        }
-        catch (IOException e){
+        } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ErrorResponse(ErrorCoder.UNCORRECT_FILE));
         }
@@ -81,13 +79,12 @@ public class ImageController {
         String fileName;
         try {
             fileName = userService.getUserById(userId).getAvatar();
-        }
-        catch (EmptyResultDataAccessException e) {
+        } catch (EmptyResultDataAccessException e) {
               return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ErrorResponse(ErrorCoder.USER_NOT_EXIST));
         }
 
-        if (fileName.compareTo("NULL") == 0){
+        if (fileName.compareTo("NULL") == 0) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ErrorResponse(ErrorCoder.UNEXISTED_FILE));
         }
@@ -95,8 +92,7 @@ public class ImageController {
         Resource file;
         try {
             file =  imageStorageService.getFile(fileName);
-        }
-        catch (MalformedURLException e) {
+        } catch (MalformedURLException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ErrorResponse(ErrorCoder.UNCORRECT_FILE));
         }

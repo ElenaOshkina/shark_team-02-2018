@@ -12,7 +12,7 @@ public class LoginForm {
             @JsonProperty("loginField") String login,
             @JsonProperty(value = "passwordField", access = JsonProperty.Access.WRITE_ONLY) String password) {
         this.login = login;
-        this.password = password ;
+        this.password = password;
     }
 
     public String getLogin() {

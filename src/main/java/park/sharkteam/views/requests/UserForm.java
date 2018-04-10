@@ -19,7 +19,7 @@ public class UserForm {
             @JsonProperty(value = "passwordField", access = JsonProperty.Access.WRITE_ONLY) String password) {
         this.login = login;
         this.email = email;
-        this.password = password ;
+        this.password = password;
     }
 
     public String getLogin() {

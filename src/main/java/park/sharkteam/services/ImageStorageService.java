@@ -17,10 +17,10 @@ import java.nio.file.StandardCopyOption;
 
 @Service
 public class ImageStorageService {
-    private final Path storageLocation = Paths.get( "upload/img/");
+    private final Path storageLocation = Paths.get("upload/img/");
 
     @Autowired
-    public ImageStorageService() throws IOException{
+    public ImageStorageService() throws IOException {
         Files.createDirectories(storageLocation);
     }
 
@@ -28,7 +28,7 @@ public class ImageStorageService {
         return storageLocation.resolve(filename);
     }
 
-    public void saveFile(MultipartFile file, String fileName)  throws  IOException{
+    public void saveFile(MultipartFile file, String fileName)  throws  IOException {
         final String filename = StringUtils.cleanPath(fileName);
         Files.copy(
                 file.getInputStream(),
@@ -37,7 +37,7 @@ public class ImageStorageService {
         );
     }
 
-    public Resource getFile(String filename) throws MalformedURLException{
+    public Resource getFile(String filename) throws MalformedURLException {
          final Path file = getPathToFile(filename);
          final Resource resource = new UrlResource(file.toUri());
          return resource;
