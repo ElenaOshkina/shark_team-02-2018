@@ -364,6 +364,12 @@ public class UserControllerTest {
                 MockMvcRequestBuilders.get("/api/users/score")
                         .header("content-type", "application/json")
                         .sessionAttr("id", user.getId())
+                        .content(
+                                "{" +
+                                        "\"startPos\":\"0\"," +
+                                        " \"numberElements\":\"3\"" +
+                                        "}"
+                        )
         ).andExpect(status().isOk());
     }
 }
