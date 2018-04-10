@@ -2,7 +2,8 @@ language: java
 jdk:
   - oraclejdk9
 sudo: required
-
+addons:
+  postgresql: "9.5"
 services:
   - postgresql
 before_script:
