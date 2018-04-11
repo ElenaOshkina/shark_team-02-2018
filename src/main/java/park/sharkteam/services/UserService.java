@@ -17,8 +17,6 @@ public class UserService {
         this.jdbcTemplate = template;
     }
 
-
-
     private static final RowMapper<User> USER_MAPPER = (responce, num) ->
             new User(
                     responce.getInt("id"),
@@ -33,9 +31,9 @@ public class UserService {
         return jdbcTemplate.queryForObject(
                 "INSERT INTO users(login, email, password, score) VALUES(?, ?, ?, ?)"
                         + "RETURNING id",
-        (response, rowNum) -> new Integer(
-                response.getInt("id")
-        ),
+                        (response, rowNum) -> (
+                                response.getInt("id")
+                        ),
                         user.getLogin(),
                         user.getEmail(),
                         user.getPassword(),
@@ -46,24 +44,24 @@ public class UserService {
      public User getUserByLogin(String login) {
          return jdbcTemplate.queryForObject(
                  "SELECT * FROM users WHERE (users.login) = ?",
-                 new Object[]{login},
-                 USER_MAPPER
+                 USER_MAPPER,
+                 login
          );
     }
 
     public User getUserByEmail(String email) {
         return jdbcTemplate.queryForObject(
                 "SELECT * FROM users WHERE (users.email) = ?",
-                new Object[]{email},
-                USER_MAPPER
+                USER_MAPPER,
+                email
         );
     }
 
     public User getUserById(Integer id) {
         return jdbcTemplate.queryForObject(
                 "SELECT * FROM users WHERE (users.id) = (?)",
-                new Object[]{id},
-                USER_MAPPER
+                USER_MAPPER,
+                id
         );
     }
 
@@ -104,17 +102,13 @@ public class UserService {
 
     public List<User> getTopPlayers(int limit, int offset) {
         return jdbcTemplate.query(
-                "SELECT id, login, email, password, score "
+                "SELECT * "
                         + "FROM users "
                         + "ORDER BY score DESC, login ASC "
                         + "LIMIT ? OFFSET ?",
-                new Object[]{limit, offset},
-                (response, rowNum) -> new User(
-                        response.getString("login"),
-                        response.getString("email"),
-                        response.getString("password"),
-                        response.getInt("score")
-                )
+                USER_MAPPER,
+                limit,
+                offset
         );
     }
 }

@@ -44,14 +44,6 @@ public class User {
         this.score = 0;
     }
 
-    public User(String login, String email, String password, int score) {
-        this.id = 0;
-        this.login = login;
-        this.email = email;
-        this.password = password;
-        this.score = score;
-    }
-
     public int getId() {
         return id;
     }

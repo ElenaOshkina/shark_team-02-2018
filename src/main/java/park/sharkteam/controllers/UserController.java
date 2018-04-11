@@ -131,7 +131,7 @@ public class UserController {
                     .body(new ErrorResponse(ErrorCoder.USER_NOT_LOGINED));
         }
 
-        User currentUser = null;
+        User currentUser;
         try {
             currentUser = userService.getUserById(currentUserId);
         } catch (EmptyResultDataAccessException e) {
@@ -153,7 +153,7 @@ public class UserController {
                     .body(new ErrorResponse(ErrorCoder.USER_NOT_LOGINED));
         }
 
-        User currentUser = null;
+        User currentUser;
         try {
             currentUser = userService.getUserById(currentUserId);
         } catch (EmptyResultDataAccessException e) {
