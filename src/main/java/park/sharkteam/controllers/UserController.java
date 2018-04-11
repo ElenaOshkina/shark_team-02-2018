@@ -67,7 +67,7 @@ public class UserController {
         } catch (DataIntegrityViolationException exception) {
             return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(new ErrorResponse(ErrorCoder.NOT_VALID_INFO));
+                .body(new ErrorResponse(ErrorCoder.INVALID_INFO));
         }
 
         httpSession.setAttribute("id", id);

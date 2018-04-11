@@ -16,7 +16,8 @@ public class UserForm {
     public UserForm(
             @JsonProperty("loginField") String login,
             @JsonProperty("emailField") String email,
-            @JsonProperty(value = "passwordField", access = JsonProperty.Access.WRITE_ONLY) String password) {
+            @JsonProperty(value = "passwordField", access = JsonProperty.Access.WRITE_ONLY) String password
+    ) {
         this.login = login;
         this.email = email;
         this.password = password;

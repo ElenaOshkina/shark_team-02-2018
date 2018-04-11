@@ -6,7 +6,7 @@ import org.springframework.jdbc.core.RowMapper;
 import park.sharkteam.models.User;
 import org.springframework.stereotype.Service;
 import javax.validation.constraints.NotNull;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class UserService {
@@ -67,30 +67,22 @@ public class UserService {
 
     public User updateUser(User user, Integer id) {
         StringBuilder querry = new StringBuilder();
-
         querry.append("UPDATE users SET ");
-        boolean changed = false;
+
+        List<String> updatedValues = new ArrayList<String>();
+
         if (user.getEmail() != null) {
-            querry.append("login = '" + user.getLogin() + "',");
-            changed = true;
+            updatedValues.add("login = '" + user.getLogin() + "'");
         }
         if (user.getLogin() != null) {
-            querry.append("email = '" + user.getEmail() + "',");
-            changed = true;
+            updatedValues.add("email = '" + user.getEmail() + "'");
         }
         if (user.getPassword() != null) {
-            querry.append("password = '" + user.getPassword() + "',");
-            changed = true;
+            updatedValues.add("password = '" + user.getPassword() + "'");
         }
 
-        if (user.getAvatar() != null) {
-            querry.append("avatar = '" + user.getAvatar() + "',");
-            changed = true;
-        }
-
-        querry.deleteCharAt(querry.length() - 1);
-        querry.append(" WHERE users.id = '" + id + "';");
-        if (changed) {
+        querry.append(String.join(", ", updatedValues) + " WHERE users.id = '" + id + "';");
+        if (!updatedValues.isEmpty()) {
             jdbcTemplate.update(querry.toString());
         }
         return user;
