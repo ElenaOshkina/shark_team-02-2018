@@ -18,5 +18,5 @@ Backend сервер для семестрового проекта по кур�
 | Выход | POST, /api/users/logout |  | {"msg":"User is successfully log out!"} |
 | Запросить данные текущего пользователя | GET, /api/users/me | | {"id","login", "email", "avatar"} | |
 | Изменить данные текущего пользователя | POST, /api/users/me | {"loginField", "emailField", "passwordField"}| {"id","login", "email", "avatar"} | |
-| Изменить аватар | POST, /api/avatars/upload | Content-Type:"multipart/form-data"; file: <file>| | {"msg":"Image saved!"}  |
-| Изменить аватар | GET, /api/avatars/<UserId> | | | filename= "<filename>"; body: <file>  |
+| Изменить аватар | POST, /api/avatars/upload | Content-Type:"multipart/form-data"; file: <file>| | {"msg":"Image saved!"}  | |
+| Изменить аватар | GET, /api/avatars/<UserId> | | | filename= "<filename>"; body: <file>  | |
