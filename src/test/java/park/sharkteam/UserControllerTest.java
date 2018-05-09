@@ -1,5 +1,6 @@
 package park.sharkteam;
 
+import net.minidev.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,8 @@ import park.sharkteam.services.UserService;
 import park.sharkteam.models.User;
 import park.sharkteam.views.requests.UserForm;
 
+import java.util.HashMap;
+import java.util.Map;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.springframework.test.jdbc.JdbcTestUtils.countRowsInTable;
@@ -42,61 +45,39 @@ public class UserControllerTest {
 
     @Test
     public void testSignupUser() throws Exception {
+
+
         //BAD_REQUEST
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/users/signup")
-                        .header("content-type", "application/json")
-                        .content(
-                                "{" +
-                                        "\"loginField\":\"\", " +
-                                        "\"passwordField\":\"\"," +
-                                        " \"emaiFieldl\":\"\"" +
-                                        "}"
-                        )
+                .header("content-type", "application/json")
+                .content(JsonBuilder.signUpForm("","",""))
         ).andExpect(status().is4xxClientError());
-
 
         //OK_RESPONSE
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/users/signup")
                         .header("content-type", "application/json")
-                        .content(
-                                "{" +
-                                        "\"loginField\":\"login\", " +
-                                        "\"passwordField\":\"password\"," +
-                                        " \"emailField\":\"user@mail.ru\"" +
-                                        "}"
-                        )
+                        .content(JsonBuilder.signUpForm("login","password","user@mail.ru"))
         ).andExpect(status().isOk());
 
         //FORBIDDEN
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/users/signup")
                         .header("content-type", "application/json")
-                        .content(
-                                "{" +
-                                        "\"loginField\":\"login\", " +
-                                        "\"passwordField\":\"password\"," +
-                                        " \"emailField\":\"user@mail.ru\"" +
-                                        "}"
-                        )
+                        .content(JsonBuilder.signUpForm("login","password","user@mail.ru"))
         ).andExpect(status().is4xxClientError());
     }
 
     @Test
     public void testSigninUser() throws Exception {
         //SignUp
+
         //OK_RESPONSE
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/users/signup")
                         .header("content-type", "application/json")
-                        .content(
-                                "{" +
-                                        "\"loginField\":\"login\", " +
-                                        "\"passwordField\":\"password\"," +
-                                        " \"emailField\":\"user@mail.ru\"" +
-                                        "}"
-                        )
+                        .content(JsonBuilder.signUpForm("login","password","user@mail.ru"))
         ).andExpect(status().isOk());
 
         final User user = userService.getUserByLogin("login");
@@ -106,26 +87,9 @@ public class UserControllerTest {
                 MockMvcRequestBuilders.post("/api/users/signup")
                         .header("content-type", "application/json")
                         .sessionAttr("id", user.getId())
-                        .content(
-                                "{" +
-                                        "\"loginField\":\"login\", " +
-                                        "\"passwordField\":\"password\"," +
-                                        " \"emailField\":\"user@mail.ru\"" +
-                                        "}"
-                        )
+                        .content(JsonBuilder.signUpForm("login","password","user@mail.ru"))
         ).andExpect(status().is4xxClientError());
 
-        //FORBIDDEN
-        mockMvc.perform(
-                MockMvcRequestBuilders.post("/api/users/signin")
-                        .header("content-type", "application/json")
-                        .content(
-                                "{" +
-                                        "\"loginField\":\"login\", " +
-                                        "\"passwordField\":\"uncorrect_password\"," +
-                                        "}"
-                        )
-        ).andExpect(status().is4xxClientError());
 
         //logout
         //OK_RESPONSE
@@ -135,7 +99,6 @@ public class UserControllerTest {
                 .content("")
         ).andExpect(status().isOk());
 
-
         //FORBIDDEN
         mockMvc.perform(MockMvcRequestBuilders.post("/api/users/logout")
                 .header("content-type", "application/json")
@@ -146,66 +109,37 @@ public class UserControllerTest {
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/users/signin")
                         .header("content-type", "application/json")
-                        .content(
-                                "{" +
-                                        "\"loginField\":\"\", " +
-                                        "\"passwordField\":\"\"" +
-                                        "}"
-                        )
+                        .content(JsonBuilder.signInForm("login","uncorrect_password"))
+        ).andExpect(status().is4xxClientError());
+
+        //FORBIDDEN
+        mockMvc.perform(
+                MockMvcRequestBuilders.post("/api/users/signin")
+                        .header("content-type", "application/json")
+                        .content(JsonBuilder.signInForm("",""))
         ).andExpect(status().is4xxClientError());
 
         //NOT_FOUND
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/users/signin")
                         .header("content-type", "application/json")
-                        .content(
-                                "{" +
-                                        "\"loginField\":\"login\", " +
-                                        "\"passwordField\":\"uncorrect_password\"," +
-                                        " \"emailField\":\"user@mail.ru\"" +
-                                        "}"
-                        )
-        ).andExpect(status().is4xxClientError());
-
-        //NOT_FOUND
-        mockMvc.perform(
-                MockMvcRequestBuilders.post("/api/users/signin")
-                        .header("content-type", "application/json")
-                        .content(
-                                "{" +
-                                        "\"loginField\":\"uncorrect_login\", " +
-                                        "\"passwordField\":\"password\"," +
-                                        " \"emailField\":\"user@mail.ru\"" +
-                                        "}"
-                        )
+                        .content(JsonBuilder.signInForm("uncorrect_login","password"))
         ).andExpect(status().is4xxClientError());
 
         //OK
+        mockMvc.perform(
+                MockMvcRequestBuilders.post("/api/users/signin")
+                        .header("content-type", "application/json")
+                        .content(JsonBuilder.signInForm("login","password"))
+        ).andExpect(status().isOk());
+
+        //FORBIDDEN
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/users/signin")
                         .header("content-type", "application/json")
                         .sessionAttr("id", user.getId())
-                        .content(
-                                "{" +
-                                        "\"loginField\":\"login\", " +
-                                        "\"passwordField\":\"password\"," +
-                                        " \"emailField\":\"user@mail.ru\"" +
-                                        "}"
-                        )
+                        .content(JsonBuilder.signInForm("login","password"))
         ).andExpect(status().is4xxClientError());
-
-        //OK
-        mockMvc.perform(
-                MockMvcRequestBuilders.post("/api/users/signin")
-                        .header("content-type", "application/json")
-                        .content(
-                                "{" +
-                                        "\"loginField\":\"login\", " +
-                                        "\"passwordField\":\"password\"," +
-                                        " \"emailField\":\"user@mail.ru\"" +
-                                        "}"
-                        )
-        ).andExpect(status().isOk());
     }
 
     @Test
@@ -229,13 +163,7 @@ public class UserControllerTest {
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/users/signup")
                         .header("content-type", "application/json")
-                        .content(
-                                "{" +
-                                        "\"loginField\":\"login\", " +
-                                        "\"passwordField\":\"password\"," +
-                                        " \"emailField\":\"user@mail.ru\"" +
-                                        "}"
-                        )
+                        .content(JsonBuilder.signUpForm("login","password","user@mail.ru"))
         ).andExpect(status().isOk());
 
         final User user = userService.getUserByLogin("login");
@@ -244,51 +172,27 @@ public class UserControllerTest {
         //Forbidden
         mockMvc.perform(MockMvcRequestBuilders.post("/api/users/me")
                 .header("content-type", "application/json")
-                .content(
-                        "{" +
-                                "\"loginField\":\"new_login\", " +
-                                "\"passwordField\":\"new_password\"," +
-                                " \"emailField\":\"new_email@mail.ru\"" +
-                                "}"
-                )
+                .content(JsonBuilder.signUpForm("new_login","new_password","new_email@mail.ru"))
         ).andExpect(status().is4xxClientError());
 
         //Forbidden
         mockMvc.perform(MockMvcRequestBuilders.post("/api/users/me")
                 .header("content-type", "application/json")
                 .sessionAttr("id",-1)
-                .content(
-                        "{" +
-                                "\"loginField\":\"new_login\", " +
-                                "\"passwordField\":\"new_password\"," +
-                                " \"emailField\":\"new_email@mail.ru\"" +
-                                "}"
-                )
+                .content(JsonBuilder.signUpForm("new_login","new_password","new_email@mail.ru"))
         ).andExpect(status().is4xxClientError());
         //Forbidden
         mockMvc.perform(MockMvcRequestBuilders.post("/api/users/me")
                 .sessionAttr("id", user.getId())
                 .header("content-type", "application/json")
-                .content(
-                        "{" +
-                                "\"loginField\":\"\", " +
-                                "\"passwordField\":\"\"," +
-                                " \"emailField\":\"\"" +
-                                "}"
-                )
+                .content(JsonBuilder.signUpForm("","",""))
         ).andExpect(status().is4xxClientError());
 
         //OK_RESPONSE
         mockMvc.perform(MockMvcRequestBuilders.post("/api/users/me")
                 .sessionAttr("id", user.getId())
                 .header("content-type", "application/json")
-                .content(
-                        "{" +
-                                "\"loginField\":\"new_login\", " +
-                                "\"passwordField\":\"new_password\"," +
-                                " \"emailField\":\"new_email@mail.ru\"" +
-                                "}"
-                )
+                .content(JsonBuilder.signUpForm("new_login","new_password","new_email@mail.ru"))
         ).andExpect(status().isOk());
 
         //OK_RESPONSE
@@ -310,13 +214,7 @@ public class UserControllerTest {
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/users/signin")
                         .header("content-type", "application/json")
-                        .content(
-                                "{" +
-                                        "\"loginField\":\"new_login\", " +
-                                        "\"passwordField\":\"new_password\"," +
-                                        " \"emailField\":\"new_email@mail.ru\"" +
-                                        "}"
-                        )
+                        .content(JsonBuilder.signUpForm("new_login","new_password","new_email@mail.ru"))
         ).andExpect(status().isOk());
     }
 
@@ -341,13 +239,7 @@ public class UserControllerTest {
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/users/signup")
                         .header("content-type", "application/json")
-                        .content(
-                                "{" +
-                                        "\"loginField\":\"login\", " +
-                                        "\"passwordField\":\"password\"," +
-                                        " \"emailField\":\"user@mail.ru\"" +
-                                        "}"
-                        )
+                        .content(JsonBuilder.signUpForm("login","password","user@mail.ru"))
         ).andExpect(status().isOk());
 
         final User user = userService.getUserByLogin("login");
@@ -364,12 +256,7 @@ public class UserControllerTest {
                 MockMvcRequestBuilders.get("/api/users/score")
                         .header("content-type", "application/json")
                         .sessionAttr("id", user.getId())
-                        .content(
-                                "{" +
-                                        "\"startPos\":\"0\"," +
-                                        " \"numberElements\":\"3\"" +
-                                        "}"
-                        )
+                        .content(JsonBuilder.scoreForm("0","3"))
         ).andExpect(status().isOk());
     }
 }
