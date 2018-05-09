@@ -10,11 +10,6 @@ before_script:
   - psql -c "create user docker with password '123';" -U postgres
   - psql -c "create database shark_team;" -U postgres
   - psql -c "grant all on database shark_team to docker;" -U postgres
-
-
-
 branches:
   only:
   - master
-
-
