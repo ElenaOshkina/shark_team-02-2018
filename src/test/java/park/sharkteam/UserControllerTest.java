@@ -48,12 +48,12 @@ public class UserControllerTest {
                 MockMvcRequestBuilders.post("/api/users/signup")
                 .header("content-type", "application/json")
                 .content(
-                        new JSONObject( Map.of(
+                        mapper.writeValueAsString(Map.of(
                                 "loginField","",
                                 "emailField","",
                                 "passwordField","password"
                                 )
-                        ).toString()
+                        )
                 )
         ).andExpect(status().is4xxClientError());
 
@@ -76,12 +76,12 @@ public class UserControllerTest {
                 MockMvcRequestBuilders.post("/api/users/signup")
                         .header("content-type", "application/json")
                         .content(
-                                new JSONObject( Map.of(
+                                mapper.writeValueAsString(Map.of(
                                         "loginField","login",
                                         "emailField","user@mail.ru",
                                         "passwordField","password"
                                         )
-                                ).toString()
+                                )
                         )
         ).andExpect(status().is4xxClientError());
     }
@@ -95,12 +95,12 @@ public class UserControllerTest {
                 MockMvcRequestBuilders.post("/api/users/signup")
                         .header("content-type", "application/json")
                         .content(
-                                new JSONObject(Map.of(
+                                mapper.writeValueAsString(Map.of(
                                         "loginField","login",
                                         "emailField","user@mail.ru",
                                         "passwordField","password"
+                                        )
                                 )
-                                ).toString()
                         )
         ).andExpect(status().isOk());
 
@@ -112,12 +112,12 @@ public class UserControllerTest {
                         .header("content-type", "application/json")
                         .sessionAttr("id", user.getId())
                         .content(
-                                new JSONObject( Map.of(
+                                mapper.writeValueAsString(Map.of(
                                         "loginField","login",
                                         "emailField","user@mail.ru",
                                         "passwordField","password"
                                         )
-                                ).toString()
+                                )
                         )
         ).andExpect(status().is4xxClientError());
 
@@ -139,10 +139,11 @@ public class UserControllerTest {
                 MockMvcRequestBuilders.post("/api/users/signin")
                         .header("content-type", "application/json")
                         .content(
-                                new JSONObject( Map.of(
+                                mapper.writeValueAsString(Map.of(
                                         "loginField","login",
-                                        "passwordField","uncorrect_password")
-                                ).toString()
+                                        "passwordField","uncorrect_password"
+                                        )
+                                )
                         )
         ).andExpect(status().is4xxClientError());
 
@@ -151,10 +152,11 @@ public class UserControllerTest {
                 MockMvcRequestBuilders.post("/api/users/signin")
                         .header("content-type", "application/json")
                         .content(
-                                new JSONObject( Map.of(
+                                mapper.writeValueAsString(Map.of(
                                         "loginField","",
-                                        "passwordField","")
-                                ).toString()
+                                        "passwordField",""
+                                        )
+                                )
                         )
         ).andExpect(status().is4xxClientError());
 
@@ -163,10 +165,11 @@ public class UserControllerTest {
                 MockMvcRequestBuilders.post("/api/users/signin")
                         .header("content-type", "application/json")
                         .content(
-                                new JSONObject( Map.of(
+                                mapper.writeValueAsString(Map.of(
                                         "loginField","uncorrect_login",
-                                        "passwordField","password")
-                                ).toString()
+                                        "passwordField","password"
+                                        )
+                                )
                         )
         ).andExpect(status().is4xxClientError());
 
@@ -175,10 +178,11 @@ public class UserControllerTest {
                 MockMvcRequestBuilders.post("/api/users/signin")
                         .header("content-type", "application/json")
                         .content(
-                                new JSONObject( Map.of(
+                                mapper.writeValueAsString(Map.of(
                                         "loginField","login",
-                                        "passwordField","password")
-                                ).toString()
+                                        "passwordField","password"
+                                        )
+                                )
                         )
         ).andExpect(status().isOk());
 
@@ -188,10 +192,11 @@ public class UserControllerTest {
                         .header("content-type", "application/json")
                         .sessionAttr("id", user.getId())
                         .content(
-                                new JSONObject( Map.of(
+                                mapper.writeValueAsString(Map.of(
                                         "loginField","login",
-                                        "passwordField","password")
-                                ).toString()
+                                        "passwordField","password"
+                                        )
+                                )
                         )
         ).andExpect(status().is4xxClientError());
     }
@@ -218,12 +223,12 @@ public class UserControllerTest {
                 MockMvcRequestBuilders.post("/api/users/signup")
                         .header("content-type", "application/json")
                         .content(
-                                new JSONObject( Map.of(
+                                mapper.writeValueAsString(Map.of(
                                         "loginField","login",
                                         "emailField","user@mail.ru",
                                         "passwordField","password"
                                         )
-                                ).toString()
+                                )
                         )
         ).andExpect(status().isOk());
 
@@ -234,12 +239,12 @@ public class UserControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/api/users/me")
                 .header("content-type", "application/json")
                 .content(
-                        new JSONObject( Map.of(
+                        mapper.writeValueAsString(Map.of(
                                 "loginField","new_login",
                                 "emailField","new_email@mail.ru",
                                 "passwordField","new_password"
                                 )
-                        ).toString()
+                        )
                 )
         ).andExpect(status().is4xxClientError());
 
@@ -248,12 +253,12 @@ public class UserControllerTest {
                 .header("content-type", "application/json")
                 .sessionAttr("id",-1)
                 .content(
-                        new JSONObject( Map.of(
+                        mapper.writeValueAsString(Map.of(
                                 "loginField","new_login",
                                 "emailField","new_email@mail.ru",
                                 "passwordField","new_password"
                                 )
-                        ).toString()
+                        )
                 )
         ).andExpect(status().is4xxClientError());
         //Forbidden
@@ -261,12 +266,12 @@ public class UserControllerTest {
                 .sessionAttr("id", user.getId())
                 .header("content-type", "application/json")
                 .content(
-                        new JSONObject( Map.of(
+                        mapper.writeValueAsString(Map.of(
                                 "loginField","",
                                 "emailField","",
                                 "passwordField",""
                                 )
-                        ).toString()
+                        )
                 )
         ).andExpect(status().is4xxClientError());
 
@@ -275,12 +280,12 @@ public class UserControllerTest {
                 .sessionAttr("id", user.getId())
                 .header("content-type", "application/json")
                 .content(
-                        new JSONObject( Map.of(
+                        mapper.writeValueAsString(Map.of(
                                 "loginField","new_login",
                                 "emailField","new_email@mail.ru",
                                 "passwordField","new_password"
                                 )
-                        ).toString()
+                        )
                 )
         ).andExpect(status().isOk());
 
@@ -303,10 +308,11 @@ public class UserControllerTest {
                 MockMvcRequestBuilders.post("/api/users/signin")
                         .header("content-type", "application/json")
                         .content(
-                                new JSONObject( Map.of(
+                                mapper.writeValueAsString(Map.of(
                                         "loginField","new_login",
-                                        "passwordField","new_password")
-                                ).toString()
+                                        "passwordField","new_password"
+                                        )
+                                )
                         )
         ).andExpect(status().isOk());
     }
@@ -333,12 +339,12 @@ public class UserControllerTest {
                 MockMvcRequestBuilders.post("/api/users/signup")
                         .header("content-type", "application/json")
                         .content(
-                                new JSONObject( Map.of(
+                                mapper.writeValueAsString(Map.of(
                                         "loginField","login",
                                         "emailField","email@mail.ru",
                                         "passwordField","password"
                                         )
-                                ).toString()
+                                )
                         )
         ).andExpect(status().isOk());
 
@@ -357,10 +363,10 @@ public class UserControllerTest {
                         .header("content-type", "application/json")
                         .sessionAttr("id", user.getId())
                         .content(
-                                new JSONObject( Map.of(
+                                mapper.writeValueAsString(Map.of(
                                         "startPos","0",
                                         "numberElements","3")
-                                ).toString()
+                                )
                         )
         ).andExpect(status().isOk());
     }
