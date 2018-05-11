@@ -1,5 +1,6 @@
 package park.sharkteam;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import net.minidev.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,13 +39,13 @@ public class UserControllerTest {
 
     @Test
     public void testSignupUser() throws Exception {
-
+        ObjectMapper mapper = new ObjectMapper();
         //BAD_REQUEST
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/users/signup")
                 .header("content-type", "application/json")
                 .content(
-                        new JSONObject( Map.of(
+                        new JSONObject(Map.of(
                                 "login","",
                                 "password","password",
                                 "email","")
@@ -58,11 +59,11 @@ public class UserControllerTest {
                 MockMvcRequestBuilders.post("/api/users/signup")
                         .header("content-type", "application/json")
                         .content(
-                                new JSONObject( Map.of(
+                                mapper.writerWithDefaultPrettyPrinter().writeValueAsString( Map.of(
                                         "login","login",
                                         "password","password",
                                         "email","user@mail.ru")
-                                ).toString()
+                                )
                         )
         ).andExpect(status().isOk());
 
