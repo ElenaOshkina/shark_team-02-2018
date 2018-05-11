@@ -1,6 +1,7 @@
 package park.sharkteam;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import net.minidev.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,12 +41,13 @@ public class UserControllerTest {
     @Test
     public void testSignupUser() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
+        Gson gsonObj = new Gson();
         //BAD_REQUEST
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/users/signup")
                 .header("content-type", "application/json")
                 .content(
-                        new JSONObject(Map.of(
+                        new JSONObject( Map.of(
                                 "login","",
                                 "password","password",
                                 "email","")
@@ -53,13 +55,12 @@ public class UserControllerTest {
                 )
         ).andExpect(status().is4xxClientError());
 
-        String json = Map.of("login","login","password","password","email","user@mail.ru").toString();
         //OK_RESPONSE
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/users/signup")
                         .header("content-type", "application/json")
                         .content(
-                                mapper.writerWithDefaultPrettyPrinter().writeValueAsString( Map.of(
+                                gsonObj.toJson( Map.of(
                                         "login","login",
                                         "password","password",
                                         "email","user@mail.ru")
