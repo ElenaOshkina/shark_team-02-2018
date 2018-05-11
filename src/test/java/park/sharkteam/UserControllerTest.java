@@ -60,11 +60,11 @@ public class UserControllerTest {
                 MockMvcRequestBuilders.post("/api/users/signup")
                         .header("content-type", "application/json")
                         .content(
-                                gsonObj.toJson( Map.of(
+                                new JSONObject(Map.of(
                                         "loginField","login",
                                         "emailField","user@mail.ru",
                                         "passwordField","password")
-                                )
+                                ).toString()
                         )
         ).andExpect(status().isOk());
 
