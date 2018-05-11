@@ -61,9 +61,9 @@ public class UserControllerTest {
                         .header("content-type", "application/json")
                         .content(
                                 gsonObj.toJson( Map.of(
-                                        "login","login",
-                                        "password","password",
-                                        "email","user@mail.ru")
+                                        "loginField","login",
+                                        "emailField","user@mail.ru",
+                                        "passwordField","password")
                                 )
                         )
         ).andExpect(status().isOk());
