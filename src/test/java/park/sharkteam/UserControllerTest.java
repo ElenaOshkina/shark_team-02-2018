@@ -1,6 +1,7 @@
 package park.sharkteam;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import net.minidev.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,6 +38,9 @@ public class UserControllerTest {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private ObjectMapper mapper = new ObjectMapper();
+
     @Test
     public void testSignupUser() throws Exception {
         //BAD_REQUEST
@@ -58,12 +62,12 @@ public class UserControllerTest {
                 MockMvcRequestBuilders.post("/api/users/signup")
                         .header("content-type", "application/json")
                         .content(
-                                new JSONObject(Map.of(
-                                        "loginField","login",
-                                        "emailField","user@mail.ru",
-                                        "passwordField","password"
-                                )
-                                ).toString()
+                             mapper.writeValueAsString(Map.of(
+                                    "loginField","login",
+                                    "emailField","user@mail.ru",
+                                    "passwordField","password"
+                                     )
+                             )
                         )
         ).andExpect(status().isOk());
 
