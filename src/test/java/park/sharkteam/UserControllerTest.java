@@ -1,7 +1,6 @@
 package park.sharkteam;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
+
 import net.minidev.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,17 +39,16 @@ public class UserControllerTest {
 
     @Test
     public void testSignupUser() throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
-        Gson gsonObj = new Gson();
         //BAD_REQUEST
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/users/signup")
                 .header("content-type", "application/json")
                 .content(
                         new JSONObject( Map.of(
-                                "login","",
-                                "password","password",
-                                "email","")
+                                "loginField","",
+                                "emailField","",
+                                "passwordField","password"
+                                )
                         ).toString()
                 )
         ).andExpect(status().is4xxClientError());
@@ -63,7 +61,8 @@ public class UserControllerTest {
                                 new JSONObject(Map.of(
                                         "loginField","login",
                                         "emailField","user@mail.ru",
-                                        "passwordField","password")
+                                        "passwordField","password"
+                                )
                                 ).toString()
                         )
         ).andExpect(status().isOk());
@@ -74,9 +73,10 @@ public class UserControllerTest {
                         .header("content-type", "application/json")
                         .content(
                                 new JSONObject( Map.of(
-                                        "login","login",
-                                        "password","password",
-                                        "email","user@mail.ru")
+                                        "loginField","login",
+                                        "emailField","user@mail.ru",
+                                        "passwordField","password"
+                                        )
                                 ).toString()
                         )
         ).andExpect(status().is4xxClientError());
@@ -92,9 +92,10 @@ public class UserControllerTest {
                         .header("content-type", "application/json")
                         .content(
                                 new JSONObject( Map.of(
-                                        "login","login",
-                                        "password","password",
-                                        "email","user@mail.ru")
+                                        "loginField","login",
+                                        "emailField","user@mail.ru",
+                                        "passwordField","password"
+                                        )
                                 ).toString()
                         )
         ).andExpect(status().isOk());
@@ -108,9 +109,10 @@ public class UserControllerTest {
                         .sessionAttr("id", user.getId())
                         .content(
                                 new JSONObject( Map.of(
-                                        "login","login",
-                                        "password","password",
-                                        "email","user@mail.ru")
+                                        "loginField","login",
+                                        "emailField","user@mail.ru",
+                                        "passwordField","password"
+                                        )
                                 ).toString()
                         )
         ).andExpect(status().is4xxClientError());
@@ -213,9 +215,10 @@ public class UserControllerTest {
                         .header("content-type", "application/json")
                         .content(
                                 new JSONObject( Map.of(
-                                        "login","login",
-                                        "password","password",
-                                        "email","user@mail.ru")
+                                        "loginField","login",
+                                        "emailField","user@mail.ru",
+                                        "passwordField","password"
+                                        )
                                 ).toString()
                         )
         ).andExpect(status().isOk());
@@ -228,9 +231,10 @@ public class UserControllerTest {
                 .header("content-type", "application/json")
                 .content(
                         new JSONObject( Map.of(
-                                "login","new_login",
-                                "password","new_password",
-                                "email","new_email@mail.ru")
+                                "loginField","new_login",
+                                "emailField","new_email@mail.ru",
+                                "passwordField","new_password"
+                                )
                         ).toString()
                 )
         ).andExpect(status().is4xxClientError());
@@ -241,9 +245,10 @@ public class UserControllerTest {
                 .sessionAttr("id",-1)
                 .content(
                         new JSONObject( Map.of(
-                                "login","new_login",
-                                "password","new_password",
-                                "email","new_email@mail.ru")
+                                "loginField","new_login",
+                                "emailField","new_email@mail.ru",
+                                "passwordField","new_password"
+                                )
                         ).toString()
                 )
         ).andExpect(status().is4xxClientError());
@@ -253,9 +258,10 @@ public class UserControllerTest {
                 .header("content-type", "application/json")
                 .content(
                         new JSONObject( Map.of(
-                                "login","",
-                                "password","",
-                                "email","")
+                                "loginField","",
+                                "emailField","",
+                                "passwordField",""
+                                )
                         ).toString()
                 )
         ).andExpect(status().is4xxClientError());
@@ -266,9 +272,10 @@ public class UserControllerTest {
                 .header("content-type", "application/json")
                 .content(
                         new JSONObject( Map.of(
-                                "login","new_login",
-                                "password","new_password",
-                                "email","new_email@mail.ru")
+                                "loginField","new_login",
+                                "emailField","new_email@mail.ru",
+                                "passwordField","new_password"
+                                )
                         ).toString()
                 )
         ).andExpect(status().isOk());
@@ -293,8 +300,8 @@ public class UserControllerTest {
                         .header("content-type", "application/json")
                         .content(
                                 new JSONObject( Map.of(
-                                        "login","new_login",
-                                        "password","new_password")
+                                        "loginField","new_login",
+                                        "passwordField","new_password")
                                 ).toString()
                         )
         ).andExpect(status().isOk());
@@ -323,9 +330,10 @@ public class UserControllerTest {
                         .header("content-type", "application/json")
                         .content(
                                 new JSONObject( Map.of(
-                                        "login","login",
-                                        "password","password",
-                                        "email","email@mail.ru")
+                                        "loginField","login",
+                                        "emailField","email@mail.ru",
+                                        "passwordField","password"
+                                        )
                                 ).toString()
                         )
         ).andExpect(status().isOk());
