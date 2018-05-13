@@ -13,8 +13,10 @@ Backend сервер для семестрового проекта по кур�
 ## API
 | Действие | Тип запроса, URL | Тело запроса | Тело ответа |
 | --- | --- | --- | --- |
-| Регистрация | POST, /api/users/signup | {"login", "email", "password"} | {"id","login", "email"} |
-| Авторизация | POST, /api/users/signin | {"login", "password"} | {"id","login", "email"} |
-| Выход | POST, /api/users/exit |  | {"msg":"User is successfully log out!"} |
-| Запросить данные текущего пользователя | GET, /api/users/me | | {"id","login", "email"} | |
-| Изменить данные текущего пользователя | POST, /api/users/me | {"login", "email", "password"}| {"id","login", "email"} | |
+| Регистрация | POST, /api/users/signup | {"loginField", "emailField", "passwordField"} | {"id","login", "email", "avatar"} |
+| Авторизация | POST, /api/users/signin | {"loginField", "passwordField"} | {"id","login", "email", "avatar"} |
+| Выход | POST, /api/users/logout |  | {"msg":"User is successfully log out!"} |
+| Запросить данные текущего пользователя | GET, /api/users/me | | {"id","login", "email", "avatar"} | |
+| Изменить данные текущего пользователя | POST, /api/users/me | {"loginField", "emailField", "passwordField"}| {"id","login", "email", "avatar"} | |
+| Изменить аватар | POST, /api/avatars/upload | Content-Type:"multipart/form-data"; file: *file*| {"msg":"Image saved!"}  | |
+| Изменить аватар | GET, /api/avatars/*UserId* | | filename= "*filename*"; body: *file*  | |

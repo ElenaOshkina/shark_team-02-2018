@@ -17,13 +17,23 @@ public class User {
     private String password;
     @JsonProperty("score")
     private int score;
+    @JsonProperty("avatar")
+    private String avatar;
 
-    public User(int id, String login, String email, String password, int score) {
+    public User(
+            int id,
+            String login,
+            String email,
+            String password,
+            int score,
+            String avatar
+    ) {
         this.id = id;
         this.login = login;
         this.email = email;
         this.password = password;
         this.score = score;
+        this.avatar = avatar;
     }
 
     public User(String login, String email, String password) {
@@ -32,14 +42,6 @@ public class User {
         this.email = email;
         this.password = password;
         this.score = 0;
-    }
-
-    public User(String login, String email, String password, int score) {
-        this.id = 0;
-        this.login = login;
-        this.email = email;
-        this.password = password;
-        this.score = score;
     }
 
     public int getId() {
@@ -78,5 +80,13 @@ public class User {
 
     public void setScore(int score) {
         this.score = score;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }
