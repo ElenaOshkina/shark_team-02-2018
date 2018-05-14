@@ -81,7 +81,7 @@ public class GameSession {
         return null;
     }
 
-    public void handleMessage(Integer userId, GameAction message){
+    public void handleMessage(Integer userId, GameAction message) {
         if (hasPlayer(userId)) {
             switch (message.getAction()) {
                 case Config.FIRE_ACTION:

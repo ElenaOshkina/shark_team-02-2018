@@ -80,7 +80,7 @@ public class Player {
     }
 
     public void move(String movement) {
-        switch(movement) {
+        switch (movement) {
             case Config.DOWN_ACTION:
                 if (currentLine > 0) {
                     currentLine--;

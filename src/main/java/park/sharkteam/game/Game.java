@@ -158,7 +158,7 @@ public class Game {
     }
 
     private void collisionDetection() {
-        for(Line line : lines) {
+        for (Line line : lines) {
             //with player
             for (int i = 0; i < players.size(); i++) {
                 Player player = players.get(i);
@@ -229,10 +229,9 @@ public class Game {
         return root;
     }
 
-
     //Только для тестов:
     public void updateForTest(long frameTime) {
-        if (isFinished()){
+        if (isFinished()) {
             return;
         }
 

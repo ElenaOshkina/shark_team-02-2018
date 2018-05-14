@@ -52,52 +52,41 @@ public class Line {
         this.position = position;
     }
 
-    public void replaceObject(int lineIndex, int index, int object){
+    public void replaceObject(int lineIndex, int index, int object) {
         if (object == Config.SHELL_CODE || object == Config.HP_CODE || object == Config.METEOR_CODE || object == 0) {
             lines[lineIndex][index] = object; //  .get(lineIndex).set(index, object);
         }
     }
 
-    public void move(long deltaTime, long speed){
+    public void move(long deltaTime, long speed) {
         position -= deltaTime * speed;
     }
 
     public ArrayNode getStateMessageForUser(ArrayNode objectsNode, int  playerIndex, boolean fullView) {
         ObjectMapper mapper = new ObjectMapper();
         for (int i = 0; i < Config.PLAYERS_NUM; i++) {
-
-            switch(lines[playerIndex][i]) {
-                case Config.METEOR_CODE: {
-                    ObjectNode objectNode = mapper.createObjectNode();
-
+            ObjectNode objectNode = mapper.createObjectNode();
+            switch (lines[playerIndex][i]) {
+                case Config.METEOR_CODE:
                     objectNode.put("type", Config.METEOR_JSON_CODE);
                     objectNode.put("x", position);
                     objectNode.put("y", i * Config.LINE_LENGTH + Config.INDENTATION);
                     objectsNode.add(objectNode);
                     break;
-                }
-                case Config.HP_CODE: {
+                case Config.HP_CODE:
                     if (fullView) {
-                        ObjectNode objectNode = mapper.createObjectNode();
-
                         objectNode.put("type", Config.HP_JSON_CODE);
                         objectNode.put("x", position);
                         objectNode.put("y", i * Config.LINE_LENGTH + Config.INDENTATION);
                         objectsNode.add(objectNode);
                     }
                     break;
-                }
-                case Config.SHELL_CODE: {
-                    if (fullView) {
-                        ObjectNode objectNode = mapper.createObjectNode();
-
-                        objectNode.put("type", Config.SHELL_JSON_CODE);
-                        objectNode.put("x", position);
-                        objectNode.put("y", i * Config.LINE_LENGTH + Config.INDENTATION);
-                        objectsNode.add(objectNode);
-                    }
+                case Config.SHELL_CODE:
+                    objectNode.put("type", Config.SHELL_JSON_CODE);
+                    objectNode.put("x", position);
+                    objectNode.put("y", i * Config.LINE_LENGTH + Config.INDENTATION);
+                    objectsNode.add(objectNode);
                     break;
-                }
                 default:
                     break;
             }
