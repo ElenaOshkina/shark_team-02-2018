@@ -51,17 +51,16 @@ public class GameMechanicsTest {
             }
         }
 
-        curPlayerIndex = game.getNextLinePlayer();
-        game.updateForTest(creationLineTime);
+         game.updateForTest(creationLineTime);
         //Cоздана новая линия метеоритов
         assertEquals(game.getLines().size(), 2);
         line = game.getLines().get(1);
         //Линии чередуются - у одного игрока с метеорами, у другого - без них
         for(int i = 0; i < Config.PLAYERS_NUM; i++){
-            if (curPlayerIndex == i) {
-                assertTrue(getMeteorsNum(line, i)> 0);
+            if (curPlayerIndex != i) {
+                assertTrue(getMeteorsNum(line, i) > 0);
             } else {
-                assertTrue(getMeteorsNum(line, 0) == -1);
+                assertTrue(getMeteorsNum(line, i) == -1);
             }
         }
     }
