@@ -77,7 +77,7 @@ public class GameSocketHandler extends TextWebSocketHandler {
             try {
                 gameSocketService.sendMessageToUser(userId, infoMessage);
             } catch (IOException ex) {
-                gameSocketService.closeConnection( userId, CloseStatus.SERVER_ERROR);
+                gameSocketService.closeConnection(userId, CloseStatus.SERVER_ERROR);
             }
             return;
         }

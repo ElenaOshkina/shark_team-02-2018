@@ -3,13 +3,11 @@ package park.sharkteam.game;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import park.sharkteam.game.messages.GameAction;
-import park.sharkteam.game.messages.InitGameMessage;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
 
 public class GameSession {
     private static final AtomicInteger ID_GENERATOR = new AtomicInteger(0);
@@ -84,9 +82,8 @@ public class GameSession {
     }
 
     public void handleMessage(Integer userId, GameAction message){
-        if(hasPlayer(userId)){
-            int id = userIds.indexOf(userId);
-            switch (message.getAction()){
+        if (hasPlayer(userId)) {
+            switch (message.getAction()) {
                 case Config.FIRE_ACTION:
                     game.shoot(userId);
                     break;
@@ -100,16 +97,16 @@ public class GameSession {
         }
     }
 
-    public Integer getWinnerId(){
+    public Integer getWinnerId() {
         return userIds.get(game.getWinerIndex());
     }
 
-    public void update(){
+    public void update() {
         game.update();
     }
 
-    public ObjectNode getGameStateMessageForUser(Integer userId){
-        if(hasPlayer(userId)) {
+    public ObjectNode getGameStateMessageForUser(Integer userId) {
+        if (hasPlayer(userId)) {
             int index = userIds.indexOf(userId);
             return game.getGameStateMessageForUser(index);
         }

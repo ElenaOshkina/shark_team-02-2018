@@ -5,12 +5,12 @@ import park.sharkteam.websocket.Message;
 public class InitGameMessage extends Message {
     private String enemy;
     private String message;
-    private Integer enemy_id;
+    private Integer enemyId;
 
-    public InitGameMessage(Integer user_id, String enemy){
+    public InitGameMessage(Integer userId, String enemy) {
         this.message = "P_START";
         this.enemy = enemy;
-        this.enemy_id = user_id;
+        this.enemyId = userId;
     }
 
     public String getEnemy() {

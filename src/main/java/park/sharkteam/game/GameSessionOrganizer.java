@@ -8,18 +8,15 @@ import org.springframework.web.socket.CloseStatus;
 import park.sharkteam.game.messages.*;
 import park.sharkteam.services.UserService;
 import park.sharkteam.websocket.GameSocketService;
-import park.sharkteam.websocket.Message;
-
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Service
 public class GameSessionOrganizer {
 
-    class gamesExecuter implements Runnable {
+    class GamesExecuter implements Runnable {
         @Override
         public void run() {
             try {
@@ -47,14 +44,16 @@ public class GameSessionOrganizer {
     ) {
         this.gameSocketService = gameSocketService;
         this.userService = userService;
+
+        new Thread(new GamesExecuter()).start();
     }
 
     public boolean isPlaying(Integer userId) {
         final Optional<GameSession>  gameSession = gameSessions.stream().filter(game -> game.hasPlayer(userId)).findFirst();
-        try{
+        try {
             gameSession.get();
             return true;
-        } catch (NoSuchElementException e){
+        } catch (NoSuchElementException e) {
             return false;
         }
     }
@@ -80,7 +79,7 @@ public class GameSessionOrganizer {
         tryToStartGame();
     }
 
-    public void tryToStartGame(){
+    public void tryToStartGame() {
         final Set<Integer> possiblePlayers = new LinkedHashSet<>();
         while (waiters.size() >= 2 || (waiters.size() >= 1 && possiblePlayers.size() >= 1)) {
             final Integer candidate = waiters.poll();
@@ -118,7 +117,7 @@ public class GameSessionOrganizer {
             gameSocketService.sendMessageToUser(secondUserId, initMessage2);
             gameSessions.add(newGame);
 
-            LOGGER.info("Game " + newGame.getId() + " started. Players:" + firstUserId + ", " + secondUserId );
+            LOGGER.info("Game " + newGame.getId() + " started. Players:" + firstUserId + ", " + secondUserId);
 
         } catch (IOException e) {
             gameSocketService.closeConnection(firstUserId, CloseStatus.SERVER_ERROR);
@@ -146,7 +145,7 @@ public class GameSessionOrganizer {
         }
     }
 
-    public void handleUnexpectedEnding( @NotNull GameSession session) {
+    public void handleUnexpectedEnding(@NotNull GameSession session) {
         final FinishGameMessage message = new FinishGameMessage();
         session.getUserIds();
         if (session == null) {
@@ -159,7 +158,7 @@ public class GameSessionOrganizer {
         message.setWon(true);
         Integer winnerId = -1;
 
-        for(Integer id : session.getUserIds()) {
+        for (Integer id : session.getUserIds()) {
            if (gameSocketService.isConnected(id)) {
                try {
                    gameSocketService.sendMessageToUser(id, message);
@@ -170,7 +169,7 @@ public class GameSessionOrganizer {
            }
         }
 
-        for(Integer id : session.getUserIds()) {
+        for (Integer id : session.getUserIds()) {
             gameSocketService.closeConnection(id, CloseStatus.NORMAL);
         }
 
@@ -201,7 +200,7 @@ public class GameSessionOrganizer {
                         try {
                             handleUnexpectedEnding(game);
                         } catch (RuntimeException ignored) {
-
+                            LOGGER.error("The game emergincy stoped", e);
                         }
                         gameSessions.remove(game);
                     }

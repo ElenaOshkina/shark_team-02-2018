@@ -10,13 +10,13 @@ public class Bullet {
     private int line;
     private int player;
 
-    public Bullet(Long position, int line, int player){
+    public Bullet(Long position, int line, int player) {
         this.position = position;
         this.line = line;
         this.player = player;
     }
 
-    public Bullet(int line){
+    public Bullet(int line) {
         this.position = Config.CREATE_SHELL_POSITION;
         this.line = line;
     }
@@ -37,9 +37,9 @@ public class Bullet {
         return line;
     }
 
-    public ArrayNode getStateMessageForUser(ArrayNode shellsNode, int  player) {
+    public ArrayNode getStateMessageForUser(ArrayNode shellsNode, int curPlayer) {
         ObjectMapper mapper = new ObjectMapper();
-        if (this.player == player){
+        if (this.player == curPlayer) {
             ObjectNode objectNode = mapper.createObjectNode();
             objectNode.put("x", position);
             objectNode.put("y", this.line * Config.LINE_LENGTH + Config.INDENTATION);

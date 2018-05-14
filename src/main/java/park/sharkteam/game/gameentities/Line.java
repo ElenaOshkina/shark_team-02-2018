@@ -1,14 +1,9 @@
 package park.sharkteam.game.gameentities;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import park.sharkteam.game.Config;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class Line {
@@ -17,18 +12,18 @@ public class Line {
 
     private Random rand = new Random();
 
-    public Line(Long position, int playerNum){
+    public Line(Long position, int playerNum) {
 
         int meteors = 0;
-        for(int i = 0; i < Config.LINES_NUM; i++){
+        for (int i = 0; i < Config.LINES_NUM; i++) {
             //Создание метеоритов
             if ((meteors < Config.LINES_NUM - 1) && (Math.random() > 0.2)) {
                 meteors++;
                 lines[playerNum][i] = Config.METEOR_CODE;
             } else {
                 //с небольшой вероятностью создаются припасы
-                if(Math.random() > 0.2){
-                    if (Math.random() > 0.5){
+                if (Math.random() > 0.2) {
+                    if (Math.random() > 0.5) {
                         lines[playerNum][i] = Config.HP_CODE;
                     } else {
                         lines[playerNum][i] = Config.SHELL_CODE;
@@ -37,7 +32,7 @@ public class Line {
             }
         }
 
-        if(meteors == 0) {
+        if (meteors == 0) {
             //на тот случай, если ни одного метеорита не было создано
             lines[playerNum][rand.nextInt(Config.LINES_NUM)] = Config.METEOR_CODE;
         }
@@ -67,37 +62,11 @@ public class Line {
         position -= deltaTime * speed;
     }
 
-    public ObjectNode toJson(boolean fullView){
-        ObjectMapper mapper = new ObjectMapper();
-        ObjectNode lineNode = mapper.createObjectNode();
-
-    /*    for(int playerNum = 0; playerNum < Config.PLAYERS_NUM; playerNum++) {
-            lineNode.put("position", position);
-            lineNode.put("playerNum", playerNum);
-
-            if (fullView) {
-                lineNode.put("line", objects.toString());
-            } else {
-                ArrayList<Integer> newObjects = new ArrayList<>(Config.LINES_NUM);
-                for (int i = 0; i < Config.LINES_NUM; i++) {
-                    if (objects.get(i) == 1) {
-                        newObjects.set(i, 1);
-                    }
-                }
-
-                lineNode.put("line", objects.toString());
-            }
-        }*/
-        return lineNode;
-    }
-
-
-
     public ArrayNode getStateMessageForUser(ArrayNode objectsNode, int  playerIndex, boolean fullView) {
         ObjectMapper mapper = new ObjectMapper();
-        for(int i = 0; i < Config.PLAYERS_NUM; i++) {
+        for (int i = 0; i < Config.PLAYERS_NUM; i++) {
 
-            switch(lines[playerIndex][i]){
+            switch(lines[playerIndex][i]) {
                 case Config.METEOR_CODE: {
                     ObjectNode objectNode = mapper.createObjectNode();
 

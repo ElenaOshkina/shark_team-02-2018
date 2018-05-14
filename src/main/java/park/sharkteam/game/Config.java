@@ -7,16 +7,16 @@ public class Config {
     public static final int PLAYERS_NUM = 2;
 
     // конец карты по оси X
-    public static final long LEFT_MAP_EDGE =(long) 20;
+    public static final long LEFT_MAP_EDGE = (long) 20;
     // позиция по оси X, при достижении которой метеориты удаляются
-    public static final long RIGHT_MAP_EDGE =(long) 650;
+    public static final long RIGHT_MAP_EDGE = (long) 650;
     // позиция по оси X, на которой создаются метеориты
     public static final long CREATE_LINES_POSITION = (long) 700;
 
     // расстояние между линиями
     public static final long  LINES_DISTANCE = (long) 100;
     // позиция по оси X, на которой создаются снаряды
-    public static final long CREATE_SHELL_POSITION =(long) 150;
+    public static final long CREATE_SHELL_POSITION = (long) 150;
 
     // начальная позиция игрока
     public static final long PLAYER_POSITION = (long) 0;
@@ -28,8 +28,8 @@ public class Config {
     public static final long INDENTATION = 100;
 
     // скорость движения
-    public static final long METEOR_SPEED =(long) 15;
-    public static final long SHELL_SPEED =(long) 15;
+    public static final long METEOR_SPEED = (long) 15;
+    public static final long SHELL_SPEED = (long) 15;
 
     // Для линии:
     public static final int SHELL_CODE = 3;
