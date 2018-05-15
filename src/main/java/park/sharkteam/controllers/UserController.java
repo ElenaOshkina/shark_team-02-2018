@@ -27,9 +27,9 @@ import park.sharkteam.views.responses.SuccessResponse;
 @RestController
 //ToDo: реальный URL фронтенд-сервера
 @CrossOrigin(
-    origins = {"http://frontend_site.herokuapp.com", "http://localhost:3000", "http://127.0.0.1:3000"},
-    allowCredentials = "true", 
-    allowedHeaders = {"origin", "content-type", "accept", "authorization"}
+        origins = {"https://frontend_site.herokuapp.com", "https://localhost", "https://127.0.0.1"},
+        allowCredentials = "true",
+        allowedHeaders = {"origin", "content-type", "accept", "authorization", "application/json"}
 )
 @RequestMapping(path = "/api/users")
 public class UserController {
