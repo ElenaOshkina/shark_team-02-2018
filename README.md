@@ -3,7 +3,8 @@
 URL: http://tp-sharkteam-backend.herokuapp.com/
 
 ## Фронтенд:
- http://client-funny-race-game.herokuapp.com/
+https://github.com/frontend-park-mail-ru/2018_1_shark_team
+(http://client-funny-race-game.herokuapp.com/)
 
 ## Описание
 Backend сервер для семестрового проекта по курсу Java (второй семестр) Технопарка.
