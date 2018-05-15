@@ -26,6 +26,7 @@ import park.sharkteam.views.responses.SuccessResponse;
 
 @RestController
 //ToDo: реальный URL фронтенд-сервера
+@CrossOrigin(origins = {"https://frontend_site.herokuapp.com", "http://localhost:3000"}, allowCredentials = "true")
 @RequestMapping(path = "/api/users")
 public class UserController {
     private UserService userService;
@@ -34,7 +35,6 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
-
 
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody UserForm body, HttpSession httpSession) {
