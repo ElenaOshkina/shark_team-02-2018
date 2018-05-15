@@ -32,40 +32,6 @@ public class GameMechanicsTest {
     }
 
     @Test
-    public void creatingLineTest(){
-        Game game = new Game();
-        int curPlayerIndex = 0;
-
-        //игра только создана - создана одна линия
-        assertEquals(game.getLines().size(), 1);
-        Line line = game.getLines().get(0);
-
-        assertTrue(line.getPosition() == Config.CREATE_LINES_POSITION);
-
-        //Линии чередуются - у одного игрока с метеорами, у другого - без них
-        for(int i = 0; i < Config.PLAYERS_NUM; i++){
-            if (curPlayerIndex == i) {
-                assertTrue(getMeteorsNum(line, i) > 0);
-            } else {
-                assertTrue(getMeteorsNum(line, 1) == -1);
-            }
-        }
-
-         game.updateForTest(creationLineTime);
-        //Cоздана новая линия метеоритов
-        assertEquals(game.getLines().size(), 2);
-        line = game.getLines().get(1);
-        //Линии чередуются - у одного игрока с метеорами, у другого - без них
-        for(int i = 0; i < Config.PLAYERS_NUM; i++){
-            if (curPlayerIndex != i) {
-                assertTrue(getMeteorsNum(line, i) > 0);
-            } else {
-                assertTrue(getMeteorsNum(line, i) == -1);
-            }
-        }
-    }
-
-    @Test
     public void actionTest(){
         Game game = new Game();
         int curPlayerIndex = 0;
