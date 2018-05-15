@@ -1,7 +1,9 @@
 # shark_team-02-2018 [![Build Status](https://travis-ci.org/3kybika/shark_team-02-2018.svg?branch=master)](https://travis-ci.org/3kybika/shark_team-02-2018)
 
 URL: http://tp-sharkteam-backend.herokuapp.com/
-Фронтенд: http://client-funny-race-game.herokuapp.com/
+
+## Фронтенд:
+ http://client-funny-race-game.herokuapp.com/
 
 ## Описание
 Backend сервер для семестрового проекта по курсу Java (второй семестр) Технопарка.
