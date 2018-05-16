@@ -20,17 +20,17 @@ public class GameSocketService {
     private static final Logger LOGGER = LoggerFactory.getLogger(GameSocketService.class);
     private Map<Integer, WebSocketSession> sessions = new ConcurrentHashMap<>();
     private final ObjectMapper objectMapper;
-    private GameSessionOrganizer gameservice;
 
     @Autowired
+    private GameSessionOrganizer gameService;
+
     public GameSocketService(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
-        this.gameservice = gameservice;
     }
 
     public void registerUser(Integer userId, WebSocketSession webSocketSession) {
         sessions.put(userId, webSocketSession);
-        gameservice.addUser(userId);
+        gameService.addUser(userId);
     }
 
     public boolean isConnected(Integer userId) {

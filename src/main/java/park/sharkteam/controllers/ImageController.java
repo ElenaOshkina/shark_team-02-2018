@@ -1,6 +1,5 @@
 package park.sharkteam.controllers;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -23,7 +22,7 @@ import java.net.MalformedURLException;
 
 @RestController
 //ToDo: реальный URL фронтенд-сервера
-@CrossOrigin(origins = {"http://frontend_site.herokuapp.com", "http://localhost:3000", "http://127.0.0.1:3000"})
+@CrossOrigin(origins = {"https://frontend_site.herokuapp.com", "http://localhost:3000"}, allowCredentials = "true")
 @RequestMapping(path = "/api/avatars")
 public class ImageController {
 

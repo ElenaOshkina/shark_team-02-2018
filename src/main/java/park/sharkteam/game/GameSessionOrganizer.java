@@ -16,6 +16,11 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 @Service
 public class GameSessionOrganizer {
 
+    @Autowired
+    private GameSocketService gameSocketService;
+    @Autowired
+    private UserService userService;
+
     class GamesExecuter implements Runnable {
         @Override
         public void run() {
@@ -32,19 +37,9 @@ public class GameSessionOrganizer {
     private ConcurrentLinkedQueue<Integer> waiters = new ConcurrentLinkedQueue<>();
     private final List<GameSession> gameSessions = new ArrayList<>();
 
-    private final GameSocketService gameSocketService;
-    private final UserService userService;
-
     private static final Long FRAME_TIME = 50L;
 
-    @Autowired
-    public GameSessionOrganizer(
-            @NotNull GameSocketService gameSocketService,
-           @NotNull UserService userService
-    ) {
-        this.gameSocketService = gameSocketService;
-        this.userService = userService;
-
+    public GameSessionOrganizer() {
         new Thread(new GamesExecuter()).start();
     }
 
@@ -145,6 +140,11 @@ public class GameSessionOrganizer {
         }
     }
 
+    public void  handleUnexpectedEnding(@NotNull Integer userId) {
+        final Optional<GameSession>  gameSession = gameSessions.stream().filter(game -> game.hasPlayer(userId)).findFirst();
+        gameSession.ifPresent(session -> handleUnexpectedEnding(session));
+    }
+
     public void handleUnexpectedEnding(@NotNull GameSession session) {
         final FinishGameMessage message = new FinishGameMessage();
         session.getUserIds();
@@ -196,11 +196,11 @@ public class GameSessionOrganizer {
                             }
                         }
                     } catch (RuntimeException e) {
-                        LOGGER.error("The game emergincy stoped", e);
+                        LOGGER.error("The game emergency stoped", e);
                         try {
                             handleUnexpectedEnding(game);
                         } catch (RuntimeException ignored) {
-                            LOGGER.error("The game emergincy stoped", e);
+                            LOGGER.error("The game emergency stoped", e);
                         }
                         gameSessions.remove(game);
                     }

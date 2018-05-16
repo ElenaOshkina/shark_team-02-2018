@@ -43,7 +43,7 @@ public class GameSocketHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionEstablished(WebSocketSession webSocketSession) {
-        final Integer userId = (Integer) webSocketSession.getAttributes().get("userId");
+        final Integer userId = (Integer) webSocketSession.getAttributes().get("id");
         if (userId == null || userService.getUserById(userId) == null) {
             LOGGER.warn("User requested websocket is not registred or not logged in. Openning websocket session is denied.");
             closeSessionSilently(webSocketSession, ACCESS_DENIED);
