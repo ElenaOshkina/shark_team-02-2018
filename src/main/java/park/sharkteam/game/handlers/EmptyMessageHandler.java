@@ -31,8 +31,7 @@ public class EmptyMessageHandler extends MessageHandler<EmptyMessage> {
     public void handle(@NotNull EmptyMessage message, @NotNull Integer userId) {
         try {
             gameSocketService.sendMessageToUser(userId, new EmptyMessage());
-        }
-        catch(IOException e){
+        } catch (IOException e) {
             gameSessionService.handleUnexpectedEnding(userId);
         }
     }
