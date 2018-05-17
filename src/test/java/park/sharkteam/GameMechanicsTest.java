@@ -51,7 +51,7 @@ public class GameMechanicsTest {
             }
         }
 
-         game.updateForTest(creationLineTime);
+        game.updateForTest(creationLineTime);
         //Cоздана новая линия метеоритов
         assertEquals(game.getLines().size(), 2);
         line = game.getLines().get(1);
@@ -121,7 +121,7 @@ public class GameMechanicsTest {
         Player player = game.getPlayer(curPlayerIndex);
 
         while (player.getLine() != meteorIndex) {
-            if (player.getLine() < 0) {
+            if (player.getLine() < meteorIndex) {
                 game.moveUser(0, Config.UP_ACTION);
             }
             else {
@@ -183,14 +183,14 @@ public class GameMechanicsTest {
 
         int meteorIndex = -1;
 
-       for(int i = 0; i < Config.LINES_NUM; i++) {
-           if(line.getObject(curPlayerIndex, i) == Config.METEOR_CODE ){
-               meteorIndex = i;
-           }
-       }
+        for(int i = 0; i < Config.LINES_NUM; i++) {
+            if(line.getObject(curPlayerIndex, i) == Config.METEOR_CODE ){
+                meteorIndex = i;
+            }
+        }
 
         while (player.getLine() != meteorIndex) {
-            if (player.getLine() < 0) {
+            if (player.getLine() < meteorIndex) {
                 game.moveUser(0, Config.UP_ACTION);
             }
             else {
@@ -230,13 +230,13 @@ public class GameMechanicsTest {
         }
 
         // подводим обоих игроков под метеорит
-         while (player_1.getLine() != meteorIndex) {
-             if (player_1.getLine() < meteorIndex) {
-                 game.moveUser(player1Idx, Config.UP_ACTION);
-             } else {
-                 game.moveUser(player1Idx, Config.DOWN_ACTION);
-             }
-         }
+        while (player_1.getLine() != meteorIndex) {
+            if (player_1.getLine() < meteorIndex) {
+                game.moveUser(player1Idx, Config.UP_ACTION);
+            } else {
+                game.moveUser(player1Idx, Config.DOWN_ACTION);
+            }
+        }
 
         while (player_2.getLine() != meteorIndex) {
             if (player_2.getLine() < meteorIndex) {
@@ -282,9 +282,9 @@ public class GameMechanicsTest {
 
 
         assertTrue(
-              (prevLinesNum > game.getLines().size()) ||
-              (prevLinesNum == game.getLines().size() && game.getLines().get(prevLinesNum - 1).getPosition() == Config.CREATE_LINES_POSITION)
-         );
+                (prevLinesNum > game.getLines().size()) ||
+                        (prevLinesNum == game.getLines().size() && game.getLines().get(prevLinesNum - 1).getPosition() == Config.CREATE_LINES_POSITION)
+        );
 
         // получаем следующую линию - с ней столкнется игрок 2
         line = game.getLines().get(0);
@@ -297,11 +297,11 @@ public class GameMechanicsTest {
 
         //перемещаем игрока 2 под метеорит
         while (player_2.getLine() != meteorIndex) {
-             if (player_2.getLine() < meteorIndex) {
-                 game.moveUser(player2Idx, Config.UP_ACTION);
-             } else {
-                 game.moveUser(player2Idx, Config.DOWN_ACTION);
-             }
+            if (player_2.getLine() < meteorIndex) {
+                game.moveUser(player2Idx, Config.UP_ACTION);
+            } else {
+                game.moveUser(player2Idx, Config.DOWN_ACTION);
+            }
         }
         long distanceToSecondLine = line.getPosition() - Config.PLAYER_HITBOX;
         long timeBeforeSecondCollision = (distanceToSecondLine / Config.METEOR_SPEED ) + 1;

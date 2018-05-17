@@ -18,8 +18,8 @@ public class Player {
     private Long position;
 
     public Player() {
-        this.shells = Config.START_HP_VALUE;
-        this.healthPoints = Config.START_SHELLS_VALUE;
+        this.shells = Config.START_SHELLS_VALUE;
+        this.healthPoints = Config.START_HP_VALUE;
         this.currentLine = Config.START_LINE;
         this.position = Config.PLAYER_POSITION;
     }
