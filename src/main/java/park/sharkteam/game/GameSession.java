@@ -82,7 +82,9 @@ public class GameSession {
     }
 
     public void handleMessage(Integer userId, GameAction message) {
-        if (hasPlayer(userId)) {
+        userId = userIds.indexOf(userId);
+        if (userId != -1) {
+            System.out.println("Action " + message.getAction() + " for user " + userId);
             switch (message.getAction()) {
                 case Config.FIRE_ACTION:
                     game.shoot(userId);

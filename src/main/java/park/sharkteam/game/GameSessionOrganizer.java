@@ -37,7 +37,7 @@ public class GameSessionOrganizer {
     private ConcurrentLinkedQueue<Integer> waiters = new ConcurrentLinkedQueue<>();
     private final List<GameSession> gameSessions = new ArrayList<>();
 
-    private static final Long FRAME_TIME = 50L;
+    private static final Long FRAME_TIME = 100L;
 
     public GameSessionOrganizer() {
         new Thread(new GamesExecuter()).start();
@@ -64,7 +64,7 @@ public class GameSessionOrganizer {
     }
 
     public void addUser(@NotNull Integer userId) {
-        if (isPlaying(userId)) {
+        if (isPlaying(userId) || waiters.contains(userId)) {
             return;
         }
         waiters.add(userId);
@@ -78,7 +78,7 @@ public class GameSessionOrganizer {
         final Set<Integer> possiblePlayers = new LinkedHashSet<>();
         while (waiters.size() >= 2 || (waiters.size() >= 1 && possiblePlayers.size() >= 1)) {
             final Integer candidate = waiters.poll();
-            if (gameSocketService.isConnected(candidate)) {
+            if (!gameSocketService.isConnected(candidate)) {
                 continue;
             }
             possiblePlayers.add(candidate);
@@ -209,7 +209,10 @@ public class GameSessionOrganizer {
                 final Long after = new Date().getTime();
 
                 try {
-                    final Long sleepingTime = FRAME_TIME - (after - before);
+                    Long sleepingTime = FRAME_TIME - (after - before);
+                    if (sleepingTime <= 0){
+                        sleepingTime = FRAME_TIME;
+                    }
                     Thread.sleep(sleepingTime);
                 } catch (InterruptedException e) {
                     LOGGER.error("Mechanics thread was interrupted", e);

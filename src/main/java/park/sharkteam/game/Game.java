@@ -41,7 +41,9 @@ public class Game {
         final Date now = new Date();
         Long frameTime = now.getTime() - lastFrameTime.getTime();
         lastFrameTime = now;
-
+        //ToDo: откалибровать конфиги  игры
+        frameTime = 2L;
+        System.out.println("Game frametime:" + frameTime);
         moveObjects(frameTime);
         removingObjectOutOfMap();
         collisionDetection();
@@ -172,6 +174,7 @@ public class Game {
                             if (isFinished()) {
                                 return;
                             }
+                            line.replaceObject(i, player.getLine(), 0);
                             break;
                         case Config.HP_CODE:
                             player.updateHealthPoints(1);

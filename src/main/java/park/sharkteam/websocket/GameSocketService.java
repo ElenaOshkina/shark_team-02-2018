@@ -83,7 +83,8 @@ public class GameSocketService {
             throw new IOException("session with userId " + userId + " is closed or not exist");
         }
         try {
-            webSocketSession.sendMessage(new TextMessage(objectMapper.writeValueAsString(message)));
+            TextMessage msg = new TextMessage(objectMapper.writeValueAsString(message));
+            webSocketSession.sendMessage(msg);
         } catch (IOException e) {
             LOGGER.error("Can't send message ", e);
             throw new IOException("Can't send message ", e);

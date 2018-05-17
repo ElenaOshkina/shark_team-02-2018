@@ -17,7 +17,7 @@ public class Line {
         int meteors = 0;
         for (int i = 0; i < Config.LINES_NUM; i++) {
             //Создание метеоритов
-            if ((meteors < Config.LINES_NUM - 1) && (Math.random() > 0.2)) {
+			if ((meteors < Config.LINES_NUM - 1) && (Math.random() > 0.2)) {
                 meteors++;
                 lines[playerNum][i] = Config.METEOR_CODE;
             } else {
@@ -64,7 +64,7 @@ public class Line {
 
     public ArrayNode getStateMessageForUser(ArrayNode objectsNode, int  playerIndex, boolean fullView) {
         ObjectMapper mapper = new ObjectMapper();
-        for (int i = 0; i < Config.PLAYERS_NUM; i++) {
+        for (int i = 0; i < Config.LINES_NUM; i++) {
             ObjectNode objectNode = mapper.createObjectNode();
             switch (lines[playerIndex][i]) {
                 case Config.METEOR_CODE:

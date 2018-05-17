@@ -57,7 +57,7 @@ public class GameSocketHandler extends TextWebSocketHandler {
         if (!webSocketSession.isOpen()) {
             return;
         }
-        final Integer userId = (Integer) webSocketSession.getAttributes().get("userId");
+        final Integer userId = (Integer) webSocketSession.getAttributes().get("id");
         if (userId == null || (userService.getUserById(userId)) == null) {
             closeSessionSilently(webSocketSession, ACCESS_DENIED);
             return;
@@ -95,7 +95,7 @@ public class GameSocketHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionClosed(WebSocketSession webSocketSession, CloseStatus closeStatus) {
-        final Integer userId = (Integer) webSocketSession.getAttributes().get("userId");
+        final Integer userId = (Integer) webSocketSession.getAttributes().get("id");
         final FinishGameMessage message = new FinishGameMessage();
         message.setWon(true);
         try {

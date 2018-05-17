@@ -2,7 +2,7 @@ package park.sharkteam.game;
 
 public class Config {
     // Число линий
-    public static final int LINES_NUM = 3;
+    public static final int LINES_NUM = 5;
     // Число линий
     public static final int PLAYERS_NUM = 2;
 
@@ -40,7 +40,7 @@ public class Config {
     public static final String HP_JSON_CODE = "hp_supply";
     public static final String SHELL_JSON_CODE = "shell_supply";
     // Начальные значения:
-    public static final int START_HP_VALUE = 5;
+    public static final int START_HP_VALUE = 10;
     public static final int START_SHELLS_VALUE = 5;
     public static final int START_LINE = 2;
     // Коды действия игрока:

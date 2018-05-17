@@ -4,15 +4,15 @@ import javax.validation.constraints.NotNull;
 
 public abstract class MessageHandler<T extends Message> {
     @NotNull
-    private final Class<T> myClass;
+    private final Class<T> messageClass;
 
     public MessageHandler(@NotNull Class<T> myClass) {
-        this.myClass = myClass;
+        this.messageClass = myClass;
     }
 
     public void handleMessage(@NotNull Message message, @NotNull Integer userId) throws HandleExeption {
         try {
-            handle(myClass.cast(message), userId);
+            handle(messageClass.cast(message), userId);
         } catch (ClassCastException ex) {
             throw new HandleExeption("Can't reed incoming message of type " + message.getClass(), ex);
         }

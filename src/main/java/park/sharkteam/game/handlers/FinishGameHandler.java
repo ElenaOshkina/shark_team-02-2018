@@ -22,6 +22,8 @@ public class FinishGameHandler extends MessageHandler<FinishGameMessage> {
         super(FinishGameMessage.class);
         this.gameSessionService = gameSessionService;
         this.messageHandlerContainer = messageHandlerContainer;
+
+        messageHandlerContainer.registerHandler(FinishGameMessage.class, this);
     }
 
     @Override

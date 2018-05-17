@@ -25,6 +25,8 @@ public class EmptyMessageHandler extends MessageHandler<EmptyMessage> {
     public EmptyMessageHandler(@NotNull MessageHandlerContainer messageHandlerContainer) {
         super(EmptyMessage.class);
         this.messageHandlerContainer = messageHandlerContainer;
+
+        messageHandlerContainer.registerHandler(EmptyMessage.class, this);
     }
 
     @Override
