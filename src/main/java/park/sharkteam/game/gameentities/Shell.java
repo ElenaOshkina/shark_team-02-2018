@@ -5,18 +5,18 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import park.sharkteam.game.Config;
 
-public class Bullet {
+public class Shell {
     private long position;
     private int line;
     private int player;
 
-    public Bullet(Long position, int line, int player) {
+    public Shell(Long position, int line, int player) {
         this.position = position;
         this.line = line;
         this.player = player;
     }
 
-    public Bullet(int line) {
+    public Shell(int line) {
         this.position = Config.CREATE_SHELL_POSITION;
         this.line = line;
     }

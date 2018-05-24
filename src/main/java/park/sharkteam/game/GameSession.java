@@ -16,16 +16,10 @@ public class GameSession {
     private final Game game;
 
     @NotNull
-    private final GameSessionOrganizer gameSessionService;
-
-    @NotNull
     private final Integer id;
 
     @NotNull
     private final ArrayList<Integer> userIds = new ArrayList<>(Config.PLAYERS_NUM);
-
-    @NotNull
-    private boolean finished;
 
     public GameSession(
             @NotNull Integer firstUserId,
@@ -33,14 +27,11 @@ public class GameSession {
             @NotNull GameSessionOrganizer gameSessionService
     ) {
         this.id = ID_GENERATOR.getAndIncrement();
-        this.gameSessionService = gameSessionService;
 
         userIds.add(firstUserId);
         userIds.add(secondUserId);
 
         this.game = new Game();
-
-        this.finished = false;
     }
 
     public Integer getId() {

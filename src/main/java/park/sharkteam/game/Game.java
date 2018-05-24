@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import park.sharkteam.game.gameentities.Bullet;
+import park.sharkteam.game.gameentities.Shell;
 import park.sharkteam.game.gameentities.Player;
 import park.sharkteam.game.gameentities.Line;
 
@@ -20,7 +20,7 @@ public class Game {
 
     private List<Player> players = new ArrayList<>(Config.PLAYERS_NUM);
     private List<Line> lines = new ArrayList<>();
-    private List<Bullet> shells = new ArrayList<>();
+    private List<Shell> shells = new ArrayList<>();
 
     private Date lastFrameTime = new Date();
     private int nextLinePlayer = 1;
@@ -45,7 +45,7 @@ public class Game {
         frameTime = 2L;
         System.out.println("Game frametime:" + frameTime);
         moveObjects(frameTime);
-        removingObjectOutOfMap();
+        deletingObjectOutOfMap();
         collisionDetection();
         creatingNewLines();
     }
@@ -57,10 +57,7 @@ public class Game {
                 num++;
             }
         }
-        if (num == 1 || num == 0) {
-            return true;
-        }
-        return false;
+        return num == 1 || num == 0;
     }
 
     public Integer getWinerIndex() {
@@ -92,7 +89,7 @@ public class Game {
              player.getShells() > 0
              && shells.stream().filter(shell -> shell.getPlayer() == playerNum).count() < Config.MAX_SHELLS_COUNT
         ) {
-            shells.add(new Bullet(player.getLine()));
+            shells.add(new Shell(player.getLine()));
             player.updateShells(-1);
         }
     }
@@ -126,7 +123,7 @@ public class Game {
         }
     }
 
-    private void removingObjectOutOfMap() {
+    private void deletingObjectOutOfMap() {
         ArrayList<Line> deletingLines = new ArrayList<>();
         for (Line line : lines) {
             if (line.getPosition() < Config.LEFT_MAP_EDGE) {
@@ -137,20 +134,20 @@ public class Game {
             lines.remove(line);
         }
 
-        ArrayList<Bullet> deletingShells = new ArrayList<>();
-        for (Bullet shell : shells) {
+        ArrayList<Shell> deletingShells = new ArrayList<>();
+        for (Shell shell : shells) {
             if (shell.getPosition() > Config.RIGHT_MAP_EDGE) {
                 deletingShells.add(shell);
             }
         }
-        for (Bullet shell : deletingShells) {
+        for (Shell shell : deletingShells) {
             shells.remove(shell);
         }
 
     }
 
     private void moveObjects(long frameTime) {
-        for (Bullet shell : shells) {
+        for (Shell shell : shells) {
             shell.move(frameTime, Config.SHELL_SPEED);
         }
 
@@ -189,7 +186,7 @@ public class Game {
             }
 
             //with shells
-            for (Bullet shell : shells) {
+            for (Shell shell : shells) {
                 if (
                     (line.getObject(shell.getPlayer(), shell.getLine()) == Config.METEOR_CODE)
                     && (abs(shell.getPosition() - line.getPosition()) < Config.SHELL_HITBOX)
@@ -213,7 +210,7 @@ public class Game {
             }
 
             ArrayNode shellsNode = mapper.createArrayNode();
-            for (Bullet shell : shells) {
+            for (Shell shell : shells) {
                 shellsNode = shell.getStateMessageForUser(shellsNode, index);
             }
 
@@ -239,7 +236,7 @@ public class Game {
         }
 
         moveObjects(frameTime);
-        removingObjectOutOfMap();
+        deletingObjectOutOfMap();
         collisionDetection();
         creatingNewLines();
     }
@@ -248,19 +245,11 @@ public class Game {
         return lines;
     }
 
-    public int getNextLinePlayer() {
-        return nextLinePlayer;
-    }
-
     public Player getPlayer(int index) {
         return players.get(index);
     }
 
-    public List<Bullet> getShells() {
+    public List<Shell> getShells() {
         return shells;
-    }
-
-    public List<Player> getPlayers() {
-        return players;
     }
 }

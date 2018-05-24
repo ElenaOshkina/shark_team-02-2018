@@ -89,7 +89,7 @@ public class GameMechanicsTest {
         assertEquals(game.getShells().size(), Config.MAX_SHELLS_COUNT);
         assertEquals(player.getShells(), Config.START_SHELLS_VALUE + 1);
 
-        for (Bullet shell : game.getShells()){
+        for (Shell shell : game.getShells()){
             assertEquals( shell.getLine(),  player.getLine());
         }
     }
