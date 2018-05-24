@@ -1,20 +1,14 @@
 package park.sharkteam;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import park.sharkteam.game.Config;
 import park.sharkteam.game.Game;
-import park.sharkteam.game.gameentities.Bullet;
-import park.sharkteam.game.gameentities.Line;
-import park.sharkteam.game.gameentities.Player;
+import park.sharkteam.game.gameentities.*;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
 
 public class GameMechanicsTest {
-
-
-
 
     public int getMeteorsNum(Line line, int playerNum){
         int meteors = 0;
@@ -35,14 +29,14 @@ public class GameMechanicsTest {
         assertEquals(game.getLines().size(), 1);
         Line line = game.getLines().get(0);
 
-        assertTrue(line.getPosition() == Config.CREATE_LINES_POSITION);
+        assertEquals( (long) line.getPosition(), Config.CREATE_LINES_POSITION);
 
         //Линии чередуются - у одного игрока с метеорами, у другого - без них
         for(int i = 0; i < Config.PLAYERS_NUM; i++){
             if (curPlayerIndex == i) {
                 assertTrue(getMeteorsNum(line, i) > 0);
             } else {
-                assertTrue(getMeteorsNum(line, 1) == 0);
+                assertEquals(getMeteorsNum(line, 1), 0);
             }
         }
 
@@ -56,7 +50,7 @@ public class GameMechanicsTest {
             if (curPlayerIndex != i) {
                 assertTrue(getMeteorsNum(line, i) > 0);
             } else {
-                assertTrue(getMeteorsNum(line, i) == 0);
+                assertEquals(getMeteorsNum(line, i), 0);
             }
         }
     }
@@ -74,14 +68,14 @@ public class GameMechanicsTest {
             game.moveUser(curPlayerIndex, Config.UP_ACTION);
         }
         game.moveUser(curPlayerIndex, Config.UP_ACTION);
-        assertTrue(player.getLine() == Config.LINES_NUM - 1);
+        assertEquals(player.getLine(), Config.LINES_NUM - 1);
 
         //двигаем вниз до упора
         while( player.getLine() != 0 ){
             game.moveUser(curPlayerIndex, Config.DOWN_ACTION);
         }
         game.moveUser(curPlayerIndex, Config.DOWN_ACTION);
-        assertTrue(player.getLine() == 0);
+        assertEquals(player.getLine(), 0);
 
         // Превысим число возможных на карте патронов
         player.updateShells(Config.MAX_SHELLS_COUNT + 1);
@@ -92,11 +86,11 @@ public class GameMechanicsTest {
         //пытаемся выстрелить еще раз, превысив лимит допустимого числа патронов на карте
         game.shoot(curPlayerIndex);
 
-        assertTrue(game.getShells().size() == Config.MAX_SHELLS_COUNT);
-        assertTrue(player.getShells() == Config.START_SHELLS_VALUE + 1);
+        assertEquals(game.getShells().size(), Config.MAX_SHELLS_COUNT);
+        assertEquals(player.getShells(), Config.START_SHELLS_VALUE + 1);
 
         for (Bullet shell : game.getShells()){
-            assertTrue(shell.getLine() == player.getLine());
+            assertEquals( shell.getLine(),  player.getLine());
         }
     }
 
@@ -148,7 +142,7 @@ public class GameMechanicsTest {
 
         int shellsBeforeCollision = player.getShells();
         game.updateForTest(timeBeforeCollision);
-        assertTrue(shellsBeforeCollision + 1== player.getShells());
+        assertEquals(shellsBeforeCollision + 1, player.getShells());
     }
 
     @Test
@@ -166,7 +160,7 @@ public class GameMechanicsTest {
 
         int hpBeforeCollision = player.getHealthPoints();
         game.updateForTest(timeBeforeCollision);
-        assertEquals((int) hpBeforeCollision + 1, (int) player.getHealthPoints());
+        assertEquals( hpBeforeCollision + 1, (int) player.getHealthPoints());
     }
 
     @Test
@@ -195,16 +189,16 @@ public class GameMechanicsTest {
         }
 
         game.shoot(curPlayerIndex);
-        assertTrue(player.getShells() == Config.START_SHELLS_VALUE - 1);
+        assertEquals(player.getShells(), Config.START_SHELLS_VALUE - 1);
 
         long distanceShellMeteor = Config.CREATE_LINES_POSITION - Config.CREATE_SHELL_POSITION - Config.SHELL_HITBOX;
         long timeBeforeShellMEteorCollision = distanceShellMeteor / (Config.METEOR_SPEED + Config.SHELL_SPEED) + 1;
 
         // Снаряд сталкивается с метеоритом и выпихивает его на дорожку другого игрока
-        assertTrue(line.getObject(curPlayerIndex, meteorIndex) == Config.METEOR_CODE);
-        assertTrue(line.getObject(enemyPlayerIndex, meteorIndex) == 0);
+        assertEquals(line.getObject(curPlayerIndex, meteorIndex), Config.METEOR_CODE);
+        assertEquals(line.getObject(enemyPlayerIndex, meteorIndex), 0);
         game.updateForTest(timeBeforeShellMEteorCollision);
-        assertTrue(line.getObject(enemyPlayerIndex, meteorIndex) == Config.METEOR_CODE);
+        assertEquals(line.getObject(enemyPlayerIndex, meteorIndex), Config.METEOR_CODE);
     }
 
     @Test
@@ -243,7 +237,7 @@ public class GameMechanicsTest {
         }
         player_1.updateHealthPoints(2 - Config.START_HP_VALUE);
         player_2.updateHealthPoints(2 - Config.START_HP_VALUE);
-        assertTrue(player_2.getHealthPoints() == 2);
+        assertEquals(player_2.getHealthPoints(), 2);
 
         //стреляем по первому метеориту
         game.shoot(player1Idx);
@@ -255,8 +249,8 @@ public class GameMechanicsTest {
 
         // Снаряд сталкивается с метеоритом и выталкивает его на дорожку другого игрока
         game.updateForTest(timeBeforeShellMeteorCollision);
-        assertTrue(line.getObject(player2Idx, meteorIndex) == Config.METEOR_CODE);
-        assertTrue(line.getObject(player1Idx, meteorIndex) == 0);
+        assertEquals(line.getObject(player2Idx, meteorIndex), Config.METEOR_CODE);
+        assertEquals(line.getObject(player1Idx, meteorIndex), 0);
 
         // тем временем создается вторая линия
         assertEquals(game.getLines().size(), 2);
@@ -268,8 +262,8 @@ public class GameMechanicsTest {
         game.updateForTest(timeBeforeCollisionFirstLine);
 
         // у первого игрока - путь чист, а у второго - на пути метеорит
-        assertTrue(player_1.getHealthPoints() == 2);
-        assertTrue(player_2.getHealthPoints() == 1);
+        assertEquals(player_1.getHealthPoints(), 2);
+        assertEquals(player_2.getHealthPoints(), 1);
 
         // теперь мы должны дождаться удаления линии, с которой мы столкнули второго игрока
         long distanceToDestroyFirstLine = line.getPosition() - Config.LEFT_MAP_EDGE ;
@@ -305,7 +299,7 @@ public class GameMechanicsTest {
 
         game.updateForTest(timeBeforeSecondCollision);
         //второй игрок столкнулся - игра окончена
-        assertEquals(game.isFinished(), true);
-        assertTrue(player_2.getHealthPoints() == 0);
+        assertTrue(game.isFinished());
+        assertEquals(player_2.getHealthPoints(), 0);
     }
 }

@@ -36,15 +36,15 @@ public class Player {
         return position;
     }
 
-    public Integer getLine() {
+    public int getLine() {
         return currentLine;
     }
 
-    public Integer getShells() {
+    public int getShells() {
         return shells;
     }
 
-    public Integer getHealthPoints() {
+    public int getHealthPoints() {
         return healthPoints;
     }
 

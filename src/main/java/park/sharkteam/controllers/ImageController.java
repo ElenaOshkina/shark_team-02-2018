@@ -29,7 +29,6 @@ public class ImageController {
     private UserService userService;
     private ImageStorageService imageStorageService;
 
-    @Autowired
     public ImageController(UserService userService, ImageStorageService imageStorageService) {
         this.userService = userService;
         this.imageStorageService = imageStorageService;

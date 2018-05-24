@@ -16,7 +16,7 @@ public class Line {
 
         int meteors = 0;
         for (int i = 0; i < Config.LINES_NUM; i++) {
-            // Создание метеоритов
+            //Создание метеоритов
             if ((meteors < Config.LINES_NUM - 1) && (Math.random() > 0.2)) {
                 meteors++;
                 lines[playerNum][i] = Config.METEOR_CODE;
@@ -40,7 +40,7 @@ public class Line {
         this.position = position;
     }
 
-    public Integer getObject(int lineIndex, int index) {
+    public int getObject(int lineIndex, int index) {
         return lines[lineIndex][index];
     }
 
