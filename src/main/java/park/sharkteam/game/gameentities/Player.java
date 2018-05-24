@@ -24,36 +24,12 @@ public class Player {
         this.position = Config.PLAYER_POSITION;
     }
 
-    public void updatePosition(String action) {
-        switch (action) {
-            case Config.UP_ACTION:
-                currentLine++;
-                if (currentLine == Config.LINES_NUM) {
-                    currentLine = Config.LINES_NUM - 1;
-                }
-                break;
-            case Config.DOWN_ACTION:
-                currentLine--;
-                if (currentLine < 0) {
-                    currentLine = 0;
-                }
-                break;
-            default:
-                break;
-        }
-    }
-
-    public boolean updateHealthPoints(int upd) {
+    public void updateHealthPoints(int upd) {
         this.healthPoints += upd;
-        return isAlive();
     }
 
-    public boolean updateShells(int upd) {
+    public void updateShells(int upd) {
         shells += upd;
-        if (shells > 0) {
-            return true;
-        }
-        return false;
     }
 
     public Long getPosition() {
@@ -73,10 +49,7 @@ public class Player {
     }
 
     public boolean isAlive() {
-        if (healthPoints > 0) {
-            return true;
-        }
-        return false;
+        return healthPoints > 0;
     }
 
     public void move(String movement) {
@@ -98,7 +71,6 @@ public class Player {
 
 
     public ObjectNode getJsonNode(boolean fullView) {
-        //return super.toString();
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode playerNode = mapper.createObjectNode();
 

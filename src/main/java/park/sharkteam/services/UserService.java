@@ -1,19 +1,28 @@
 package park.sharkteam.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import park.sharkteam.models.User;
 import org.springframework.stereotype.Service;
+import park.sharkteam.utilities.ErrorCoder;
+import park.sharkteam.views.responses.ErrorResponse;
+
 import javax.validation.constraints.NotNull;
 import java.util.*;
 
 @Service
 public class UserService {
     private final JdbcTemplate jdbcTemplate;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    public UserService(JdbcTemplate template) {
+    public UserService(PasswordEncoder passwordEncoder, JdbcTemplate template) {
+        this.passwordEncoder = passwordEncoder;
         this.jdbcTemplate = template;
     }
 
@@ -36,7 +45,7 @@ public class UserService {
                         ),
                         user.getLogin(),
                         user.getEmail(),
-                        user.getPassword(),
+                        passwordEncoder.encode(user.getPassword()),
                         user.getScore()
         );
     }
@@ -49,14 +58,6 @@ public class UserService {
          );
     }
 
-    public User getUserByEmail(String email) {
-        return jdbcTemplate.queryForObject(
-                "SELECT * FROM users WHERE (users.email) = ?",
-                USER_MAPPER,
-                email
-        );
-    }
-
     public User getUserById(Integer id) {
         return jdbcTemplate.queryForObject(
                 "SELECT * FROM users WHERE (users.id) = (?)",
@@ -65,31 +66,52 @@ public class UserService {
         );
     }
 
-    public User updateUser(User user, Integer id) {
-        StringBuilder querry = new StringBuilder();
-        querry.append("UPDATE users SET ");
-
-        List<String> updatedValues = new ArrayList<String>();
-
-        if (user.getEmail() != null) {
-            updatedValues.add("login = '" + user.getLogin() + "'");
+    public User getUserByLoginPassword(String login, String password) {
+        User user;
+        try {
+            user = jdbcTemplate.queryForObject(
+                    "SELECT * FROM users WHERE (users.login) = ?",
+                    USER_MAPPER,
+                    login
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return null;
         }
+        if (passwordEncoder.matches(password, user.getPassword())){
+            return user;
+        }
+        return null;
+    }
+
+    public User updateUser(User user, Integer id) {
+        String querry = "UPDATE users SET ";
+
+        ArrayList params = new ArrayList() ;
+
         if (user.getLogin() != null) {
-            updatedValues.add("email = '" + user.getEmail() + "'");
+            querry += " login = ?,";
+            params.add(user.getLogin());
+        }
+        if (user.getEmail() != null) {
+            querry += " email = ?,";
+            params.add(user.getEmail());
         }
         if (user.getPassword() != null) {
-            updatedValues.add("password = '" + user.getPassword() + "'");
+            querry += " password = ?,";
+            params.add(passwordEncoder.encode(user.getPassword()));
         }
+        querry = querry.substring(0, querry.length()-1);
+        querry += " WHERE users.id = ? ;";
 
-        querry.append(String.join(", ", updatedValues) + " WHERE users.id = '" + id + "';");
-        if (!updatedValues.isEmpty()) {
-            jdbcTemplate.update(querry.toString());
+        params.add(id);
+        if (!params.isEmpty()) {
+            jdbcTemplate.update(querry, params.toArray());
         }
         return user;
     }
 
     public void updateScore(Integer id, Integer scores) {
-        jdbcTemplate.update("UPDATE users SET score=? WHERE id=?", scores, id);
+        jdbcTemplate.update("UPDATE users SET score= score + ? WHERE id = ? ;", scores, id);
     }
 
     public List<User> getTopPlayers(int limit, int offset) {

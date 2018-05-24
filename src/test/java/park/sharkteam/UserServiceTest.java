@@ -1,9 +1,6 @@
 package park.sharkteam;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +21,7 @@ import park.sharkteam.models.User;
 @ActiveProfiles("test")
 @SpringBootTest
 public class UserServiceTest extends Assert {
+
 
     @Autowired
     private JdbcTemplate template;
@@ -51,7 +49,6 @@ public class UserServiceTest extends Assert {
         assertNotNull(userId);
         final User newUser = userService.getUserById(userId);
         assertEquals(user.getLogin(), newUser.getLogin());
-        assertEquals(user.getPassword(), newUser.getPassword());
         assertEquals(user.getEmail(), newUser.getEmail());
     }
 
@@ -88,7 +85,6 @@ public class UserServiceTest extends Assert {
         final User changedUser = userService.getUserById(userId);
         if(changedUser != null) {
             assertEquals("newLogin", changedUser.getLogin());
-            assertEquals("newPassword", changedUser.getPassword());
             assertEquals("newEmail@email.com", changedUser.getEmail());
         }
     }

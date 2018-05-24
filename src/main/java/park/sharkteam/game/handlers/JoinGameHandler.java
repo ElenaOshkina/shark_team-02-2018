@@ -13,14 +13,10 @@ public class JoinGameHandler extends MessageHandler<JoinGameMessage> {
     @NotNull
     private GameSessionOrganizer gameService;
 
-    @NotNull
-    private MessageHandlerContainer messageHandlerContainer;
-
     public JoinGameHandler(@NotNull GameSessionOrganizer gameService,
                              @NotNull MessageHandlerContainer messageHandlerContainer) {
         super(JoinGameMessage.class);
         this.gameService = gameService;
-        this.messageHandlerContainer = messageHandlerContainer;
 
         messageHandlerContainer.registerHandler(JoinGameMessage.class, this);
     }

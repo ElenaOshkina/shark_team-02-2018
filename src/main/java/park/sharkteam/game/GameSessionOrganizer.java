@@ -12,6 +12,7 @@ import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @Service
 public class GameSessionOrganizer {
@@ -35,7 +36,7 @@ public class GameSessionOrganizer {
     private static final Logger LOGGER = LoggerFactory.getLogger(GameSessionOrganizer.class);
 
     private ConcurrentLinkedQueue<Integer> waiters = new ConcurrentLinkedQueue<>();
-    private final List<GameSession> gameSessions = new ArrayList<>();
+    private final CopyOnWriteArrayList<GameSession> gameSessions = new CopyOnWriteArrayList<>();
 
     private static final Long FRAME_TIME = 100L;
 
@@ -45,12 +46,7 @@ public class GameSessionOrganizer {
 
     public boolean isPlaying(Integer userId) {
         final Optional<GameSession>  gameSession = gameSessions.stream().filter(game -> game.hasPlayer(userId)).findFirst();
-        try {
-            gameSession.get();
-            return true;
-        } catch (NoSuchElementException e) {
-            return false;
-        }
+        return gameSession.isPresent();
     }
 
     public boolean checkConnection(@NotNull GameSession gameSession) {
@@ -130,6 +126,7 @@ public class GameSessionOrganizer {
             try {
                 finishGameMessageMessage.setWon(id == winnerId);
                 gameSocketService.sendMessageToUser(id, finishGameMessageMessage);
+                gameSocketService.closeConnection(id,CloseStatus.NORMAL);
             } catch (IOException e) {
                 LOGGER.warn("Failed to send FinishGameMessage to user " + id, e);
             }
@@ -210,7 +207,7 @@ public class GameSessionOrganizer {
 
                 try {
                     Long sleepingTime = FRAME_TIME - (after - before);
-                    if (sleepingTime <= 0) {
+                    if (sleepingTime <= 0){
                         sleepingTime = FRAME_TIME;
                     }
                     Thread.sleep(sleepingTime);

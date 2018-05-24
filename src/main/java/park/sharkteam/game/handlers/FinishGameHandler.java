@@ -13,15 +13,12 @@ public class FinishGameHandler extends MessageHandler<FinishGameMessage> {
     @NotNull
     private GameSessionOrganizer gameSessionService;
 
-    @NotNull
-    private MessageHandlerContainer messageHandlerContainer;
 
     public FinishGameHandler(@NotNull GameSessionOrganizer gameSessionService,
                              @NotNull MessageHandlerContainer messageHandlerContainer
     ) {
         super(FinishGameMessage.class);
         this.gameSessionService = gameSessionService;
-        this.messageHandlerContainer = messageHandlerContainer;
 
         messageHandlerContainer.registerHandler(FinishGameMessage.class, this);
     }

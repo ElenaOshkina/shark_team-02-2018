@@ -6,6 +6,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpSession;
@@ -30,10 +31,12 @@ import park.sharkteam.views.responses.SuccessResponse;
 @RequestMapping(path = "/api/users")
 public class UserController {
     private UserService userService;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, PasswordEncoder passwordEncoder) {
         this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping("/signup")
@@ -91,15 +94,9 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                 .body(new ErrorResponse(ErrorCoder.ALREADY_LOGGED));
         }
-        final User currentUser;
-        try {
-           currentUser = userService.getUserByLogin(login);
-        } catch (EmptyResultDataAccessException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ErrorResponse(ErrorCoder.USER_NOT_EXIST));
-        }
+        final User currentUser = userService.getUserByLoginPassword(login, password);
 
-        if (!currentUser.getPassword().equals(password)) {
+        if (currentUser == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(new ErrorResponse(ErrorCoder.UNCORRECT_PASSWORD));
         }

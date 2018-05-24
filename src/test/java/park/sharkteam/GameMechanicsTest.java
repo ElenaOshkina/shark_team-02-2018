@@ -2,8 +2,6 @@ package park.sharkteam;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 import park.sharkteam.game.Config;
 import park.sharkteam.game.Game;
 import park.sharkteam.game.gameentities.Bullet;
@@ -13,12 +11,9 @@ import park.sharkteam.game.gameentities.Player;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
 public class GameMechanicsTest {
 
-    long creationLineDistance = Config.CREATE_LINES_POSITION - Config.RIGHT_MAP_EDGE + Config.LINES_DISTANCE;
-    long creationLineTime = creationLineDistance / Config.METEOR_SPEED + 1;
+
 
 
     public int getMeteorsNum(Line line, int playerNum){
@@ -51,7 +46,8 @@ public class GameMechanicsTest {
             }
         }
 
-        game.updateForTest(creationLineTime);
+        long creationLineDistance = Config.CREATE_LINES_POSITION - Config.RIGHT_MAP_EDGE + Config.LINES_DISTANCE;
+        game.updateForTest(creationLineDistance / Config.METEOR_SPEED + 1);
         //Cоздана новая линия метеоритов
         assertEquals(game.getLines().size(), 2);
         line = game.getLines().get(1);
@@ -170,7 +166,7 @@ public class GameMechanicsTest {
 
         int hpBeforeCollision = player.getHealthPoints();
         game.updateForTest(timeBeforeCollision);
-        assertTrue(hpBeforeCollision + 1 == player.getHealthPoints());
+        assertEquals((int) hpBeforeCollision + 1, (int) player.getHealthPoints());
     }
 
     @Test
@@ -266,11 +262,12 @@ public class GameMechanicsTest {
         assertEquals(game.getLines().size(), 2);
 
 
-        //Сталкиваем игрока со второй линией
+        //Сталкиваем игрока со первой линией
         long distanceToCollisionFirstLine = line.getPosition() - Config.PLAYER_HITBOX ;
         long timeBeforeCollisionFirstLine = (distanceToCollisionFirstLine / Config.METEOR_SPEED) + 1;
         game.updateForTest(timeBeforeCollisionFirstLine);
 
+        // у первого игрока - путь чист, а у второго - на пути метеорит
         assertTrue(player_1.getHealthPoints() == 2);
         assertTrue(player_2.getHealthPoints() == 1);
 

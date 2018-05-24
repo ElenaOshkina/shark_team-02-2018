@@ -14,8 +14,6 @@ import java.io.IOException;
 @Component
 public class EmptyMessageHandler extends MessageHandler<EmptyMessage> {
 
-    @NotNull
-    private MessageHandlerContainer messageHandlerContainer;
 
     @Autowired
     private GameSocketService gameSocketService;
@@ -24,8 +22,6 @@ public class EmptyMessageHandler extends MessageHandler<EmptyMessage> {
 
     public EmptyMessageHandler(@NotNull MessageHandlerContainer messageHandlerContainer) {
         super(EmptyMessage.class);
-        this.messageHandlerContainer = messageHandlerContainer;
-
         messageHandlerContainer.registerHandler(EmptyMessage.class, this);
     }
 

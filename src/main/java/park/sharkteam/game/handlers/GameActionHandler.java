@@ -15,14 +15,11 @@ public class GameActionHandler extends MessageHandler<GameAction> {
     @NotNull
     private GameSessionOrganizer gameService;
 
-    @NotNull
-    private MessageHandlerContainer messageHandlerContainer;
 
     public GameActionHandler(@NotNull GameSessionOrganizer gameService,
                               @NotNull MessageHandlerContainer messageHandlerContainer) {
         super(GameAction.class);
         this.gameService = gameService;
-        this.messageHandlerContainer = messageHandlerContainer;
 
         messageHandlerContainer.registerHandler(GameAction.class, this);
     }
