@@ -1,17 +1,11 @@
 package park.sharkteam.services;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import park.sharkteam.models.User;
 import org.springframework.stereotype.Service;
-import park.sharkteam.utilities.ErrorCoder;
-import park.sharkteam.views.responses.ErrorResponse;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;
@@ -77,7 +71,7 @@ public class UserService {
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
-        if (passwordEncoder.matches(password, user.getPassword())){
+        if (passwordEncoder.matches(password, user.getPassword())) {
             return user;
         }
         return null;
@@ -86,7 +80,7 @@ public class UserService {
     public User updateUser(User user, Integer id) {
         String querry = "UPDATE users SET ";
 
-        ArrayList params = new ArrayList() ;
+        ArrayList params = new ArrayList();
 
         if (user.getLogin() != null) {
             querry += " login = ?,";
@@ -100,7 +94,7 @@ public class UserService {
             querry += " password = ?,";
             params.add(passwordEncoder.encode(user.getPassword()));
         }
-        querry = querry.substring(0, querry.length()-1);
+        querry = querry.substring(0, querry.length() - 1);
         querry += " WHERE users.id = ? ;";
 
         params.add(id);

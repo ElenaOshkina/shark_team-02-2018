@@ -126,7 +126,7 @@ public class GameSessionOrganizer {
             try {
                 finishGameMessageMessage.setWon(id == winnerId);
                 gameSocketService.sendMessageToUser(id, finishGameMessageMessage);
-                gameSocketService.closeConnection(id,CloseStatus.NORMAL);
+                gameSocketService.closeConnection(id, CloseStatus.NORMAL);
             } catch (IOException e) {
                 LOGGER.warn("Failed to send FinishGameMessage to user " + id, e);
             }
@@ -207,7 +207,7 @@ public class GameSessionOrganizer {
 
                 try {
                     Long sleepingTime = FRAME_TIME - (after - before);
-                    if (sleepingTime <= 0){
+                    if (sleepingTime <= 0) {
                         sleepingTime = FRAME_TIME;
                     }
                     Thread.sleep(sleepingTime);
