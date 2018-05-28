@@ -2,6 +2,10 @@
 
 URL: http://tp-sharkteam-backend.herokuapp.com/
 
+## Фронтенд:
+https://github.com/frontend-park-mail-ru/2018_1_shark_team
+(http://client-funny-race-game.herokuapp.com/)
+
 ## Описание
 Backend сервер для семестрового проекта по курсу Java (второй семестр) Технопарка.
  
@@ -19,4 +23,4 @@ Backend сервер для семестрового проекта по кур�
 | Запросить данные текущего пользователя | GET, /api/users/me | | {"id","login", "email", "avatar"} | |
 | Изменить данные текущего пользователя | POST, /api/users/me | {"loginField", "emailField", "passwordField"}| {"id","login", "email", "avatar"} | |
 | Изменить аватар | POST, /api/avatars/upload | Content-Type:"multipart/form-data"; file: *file*| {"msg":"Image saved!"}  | |
-| Изменить аватар | GET, /api/avatars/*UserId* | | filename= "*filename*"; body: *file*  | |
+| Получить аватар | GET, /api/avatars/*UserId* | | filename= "*filename*"; body: *file*  | |

@@ -46,15 +46,15 @@ public class UserControllerTest {
         //BAD_REQUEST
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/users/signup")
-                .header("content-type", "application/json")
-                .content(
-                        mapper.writeValueAsString(Map.of(
-                                "loginField","",
-                                "emailField","",
-                                "passwordField","password"
+                        .header("content-type", "application/json")
+                        .content(
+                                mapper.writeValueAsString(Map.of(
+                                        "loginField","",
+                                        "emailField","",
+                                        "passwordField","password"
+                                        )
                                 )
                         )
-                )
         ).andExpect(status().is4xxClientError());
 
         //OK_RESPONSE
@@ -62,12 +62,12 @@ public class UserControllerTest {
                 MockMvcRequestBuilders.post("/api/users/signup")
                         .header("content-type", "application/json")
                         .content(
-                             mapper.writeValueAsString(Map.of(
-                                    "loginField","login",
-                                    "emailField","user@mail.ru",
-                                    "passwordField","password"
-                                     )
-                             )
+                                mapper.writeValueAsString(Map.of(
+                                        "loginField","login",
+                                        "emailField","user@mail.ru",
+                                        "passwordField","password"
+                                        )
+                                )
                         )
         ).andExpect(status().isOk());
 
@@ -208,14 +208,14 @@ public class UserControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/users/me")
                 .header("content-type", "application/json")
         )
-        .andExpect(status().is4xxClientError());
+                .andExpect(status().is4xxClientError());
 
         //FORBIDDEN
         mockMvc.perform(MockMvcRequestBuilders.get("/api/users/me")
                 .header("content-type", "application/json")
                 .sessionAttr("id", -1)
         )
-        .andExpect(status().is4xxClientError());
+                .andExpect(status().is4xxClientError());
 
         //SignUp
         //OK_RESPONSE
@@ -294,7 +294,7 @@ public class UserControllerTest {
                 .sessionAttr("id", user.getId())
                 .header("content-type", "application/json")
         )
-        .andExpect(status().isOk());
+                .andExpect(status().isOk());
 
         //logout
         //OK_RESPONSE
@@ -332,7 +332,7 @@ public class UserControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/users/score")
                 .header("content-type", "application/json")
         )
-        .andExpect(status().is4xxClientError());
+                .andExpect(status().is4xxClientError());
 
         //OK_RESPONSE
         mockMvc.perform(
